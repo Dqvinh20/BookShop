@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "BookShop (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "BookShop (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
