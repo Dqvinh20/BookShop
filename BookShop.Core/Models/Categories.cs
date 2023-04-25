@@ -7,18 +7,18 @@ using Newtonsoft.Json;
 
 namespace BookShop.Core.Models;
 
-
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class Categories 
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [JsonProperty("created_at")]
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     [JsonProperty("updated_at")]
-    public DateTime UpdatedAt{ get; set; }
+    public DateTime? UpdatedAt{ get; set; }
 }

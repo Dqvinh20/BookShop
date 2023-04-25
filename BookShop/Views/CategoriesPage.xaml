@@ -5,13 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:helpers="using:BookShop.Helpers"
     mc:Ignorable="d">
 
     <Page.Resources>
         <StaticResource x:Key="GridViewItemBackgroundSelected" ResourceKey="AccentFillColorDefaultBrush" />
         <StaticResource x:Key="GridViewItemBackgroundSelectedPointerOver" ResourceKey="AccentFillColorSecondaryBrush" />
         <StaticResource x:Key="GridViewItemForegroundSelected" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
-        
+
+
         <DataTemplate x:Key="CategoryTemplate">
             <UserControl PointerPressed="Category_TemplatePointerPressed" >
                 <Grid
@@ -53,26 +55,37 @@
 
        
     </Page.Resources>
+    
 
     <Grid x:Name="ContentArea">
-        <ItemsRepeaterScrollHost>
-            <ScrollViewer x:Name="WrapScrollParent" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
-                <ItemsRepeater
-                    x:Name="ItemRepeater"
-                    VerticalAlignment="Top" 
-                    HorizontalAlignment="Stretch"
-                    MinWidth="100"
-                    ElementIndexChanged="ItemRepeater_ElementIndexChanged"
-                    ElementPrepared="ItemRepeater_ElementPrepared"
-                    ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
-                    ItemTemplate ="{StaticResource CategoryTemplate}"
-                    >
-                    <ItemsRepeater.Layout>
-                        <controls:WrapLayout Orientation="Horizontal" HorizontalSpacing="6" VerticalSpacing="6"/>
-                    </ItemsRepeater.Layout>
-                </ItemsRepeater>
-            </ScrollViewer>
-        </ItemsRepeaterScrollHost>
+        <StackPanel Orientation="Vertical">
+            
+            <CommandBar x:Name="PrimaryCommandBar" IsOpen="False" DefaultLabelPosition="Right">
+                        <AppBarButton x:Name="addButton" Icon="Add" Label="Add" Click="OnElementClicked"/>
+                        <AppBarButton x:Name="editButton" Icon="Edit" Label="Edit" Click="OnElementClicked" IsEnabled="{x:Bind ViewModel.IsNotEmpty, Mode=OneWay}"/>
+                <AppBarButton x:Name="deleteButton" Icon="Delete" Label="Delete" Click="OnElementClicked" IsEnabled="{x:Bind ViewModel.IsNotEmpty, Mode=OneWay}"/>
+                 
+            </CommandBar>
+        
+            <ItemsRepeaterScrollHost>
+                <ScrollViewer x:Name="WrapScrollParent" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+                    <ItemsRepeater
+                        x:Name="ItemRepeater"
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Stretch"
+                        MinWidth="100"
+                        ElementIndexChanged="ItemRepeater_ElementIndexChanged"
+                        ElementPrepared="ItemRepeater_ElementPrepared"
+                        ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
+                        ItemTemplate ="{StaticResource CategoryTemplate}"
+                        >
+                        <ItemsRepeater.Layout>
+                            <controls:WrapLayout Orientation="Horizontal" HorizontalSpacing="6" VerticalSpacing="6"/>
+                        </ItemsRepeater.Layout>
+                    </ItemsRepeater>
+                </ScrollViewer>
+            </ItemsRepeaterScrollHost>
+        </StackPanel>
 
         <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsBusy, Mode=OneWay}">
             <StackPanel Orientation="Horizontal" Padding="12">
@@ -80,5 +93,7 @@
                 <TextBlock Text="Please wait a moment" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
         </controls:Loading>
+        
     </Grid>
+    
 </Page>

@@ -16,6 +16,12 @@ public class CategoriesViewModel : ObservableRecipient, INavigationAware
         get => _isBusy; set => SetProperty(ref _isBusy, value);
     }
 
+    private bool _isNotEmpty = false;
+    public bool IsNotEmpty
+    {
+        get => _isNotEmpty; set => SetProperty(ref _isNotEmpty, value);
+    }
+
     public ObservableCollection<Categories> Source { get; } = new ObservableCollection<Categories>();
 
     public CategoriesViewModel()
@@ -29,6 +35,7 @@ public class CategoriesViewModel : ObservableRecipient, INavigationAware
         IsBusy = true;
 
         var data = await App.Repository.Categories.GetAllCategoriesAsync();
+        IsNotEmpty = data.ToArray().Length != 0;
         foreach (var item in data)
         {
             Source.Add(item);
