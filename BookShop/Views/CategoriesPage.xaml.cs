@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Shapes;
 
 namespace BookShop.Views;
 
@@ -22,7 +23,7 @@ public sealed partial class CategoriesPage : Page
     public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register("SelectedItem", typeof(Categories), typeof(CategoriesPage), new PropertyMetadata(null));
 
-    public Categories SelectedItem
+    public Categories? SelectedItem
     {
         get
         {
@@ -72,7 +73,7 @@ public sealed partial class CategoriesPage : Page
         MoveToSelectionState(args.Element, newItem == SelectedItem);
     }
 
-    private void OnElementClicked(object sender, RoutedEventArgs e)
+    private async void OnElementClicked(object sender, RoutedEventArgs e)
     {
         switch ((sender as AppBarButton).Label)
         {
@@ -83,6 +84,7 @@ public sealed partial class CategoriesPage : Page
                 ShowDialog_Clicked("Edit");
                 break;
             case "Delete":
+                ShowDialog_Clicked("Delete");
                 
                 break;
                 
@@ -95,54 +97,87 @@ public sealed partial class CategoriesPage : Page
         // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
         dialog.XamlRoot = this.XamlRoot;
         dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-        dialog.Title = title == "Add" ? "Add new category" : "Edit";
-        dialog.PrimaryButtonText = "Save";
+        dialog.Title = title == "Add" ? "Add new category" : title;
+        TextBox textBox = null;
+        if (title != "Delete")
+        {
+            dialog.PrimaryButtonText = "Save";
+            textBox = new TextBox();
+            textBox.Text = title == "Add" ? "" : SelectedItem.Name;
+            dialog.Content = textBox;
+        }
+        else
+        {
+            dialog.PrimaryButtonText = "Yes, delete it";
+            dialog.Content = "Are you sure you want to delete it?";
+        }
+        
         dialog.CloseButtonText = "Cancel";
         dialog.DefaultButton = ContentDialogButton.Primary;
-        TextBox textBox = new TextBox();
-        textBox.Text = title == "Add" ? "" : SelectedItem.Name;
-        dialog.Content = textBox;
 
-        var result = await dialog.ShowAsync();
-        if (result == ContentDialogResult.Primary)
+        if (title != "Delete" || (title == "Delete" && SelectedItem != null))
         {
-            if (ViewModel.Source.FirstOrDefault(c => c.Name == textBox.Text) != null)
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
             {
-                ContentDialog dialog1 = new ContentDialog();
 
-                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-                dialog.XamlRoot = this.XamlRoot;
-                dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                dialog.Title = "Error";
-                dialog.PrimaryButtonText = "OK";
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                dialog.Content = "Category already existed";
-
-                await dialog.ShowAsync();
-                return;
-            }
-            var newCategory = new Categories() {
-                Name = textBox.Text,
-                Id = title == "Add" ? null : SelectedItem.Id
-            };
-
-            ViewModel.IsBusy = true;
-            var newData = await App.Repository.Categories.UpsertCategoryAsync(newCategory);
-            foreach (var category in newData)
-            {
-                if (title == "Add")
+                if (title != "Delete")
                 {
-                    ViewModel.Source.Add(category);
+                    if (ViewModel.Source.FirstOrDefault(c => c.Name == textBox.Text) != null)
+                    {
+                        ContentDialog dialog1 = new ContentDialog();
+
+                        // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                        dialog.XamlRoot = this.XamlRoot;
+                        dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+                        dialog.Title = "Error";
+                        dialog.PrimaryButtonText = "OK";
+                        dialog.DefaultButton = ContentDialogButton.Primary;
+                        dialog.Content = "Category already existed";
+
+                        await dialog.ShowAsync();
+                        return;
+                    }
+                }
+                Rectangle acrylicArea = AcrylicArea;
+
+                acrylicArea.Visibility = Visibility.Visible;
+                ViewModel.IsBusy = true;
+
+
+                if (title != "Delete")
+                {
+                    var newCategory = new Categories()
+                    {
+                        Name = textBox.Text,
+                        Id = title == "Add" ? null : SelectedItem.Id
+                    };
+                    var newData = await App.Repository.Categories.UpsertCategoryAsync(newCategory);
+                    foreach (var category in newData)
+                    {
+                        if (title == "Add")
+                        {
+                            ViewModel.Source.Add(category);
+                        }
+                        else
+                        {
+                            var oldIndex = ViewModel.Source.IndexOf(SelectedItem);
+                            ViewModel.Source[oldIndex] = category;
+                            SelectedItem = ViewModel.Source[oldIndex];
+                        }
+                    }
+                    ViewModel.Source.SortStable((x, y) => string.Compare(x.Name, y.Name));
                 }
                 else
                 {
-                    var oldIndex = ViewModel.Source.IndexOf(SelectedItem);
-                    ViewModel.Source[oldIndex] = category;
-                    SelectedItem = ViewModel.Source[oldIndex];
+                    await App.Repository.Categories.DeleteCategoryAsync((int)SelectedItem.Id);
+                    ViewModel.Source.Remove(SelectedItem);
+                    SelectedItem = null;
                 }
+
+                ViewModel.IsBusy = false;
+                acrylicArea.Visibility = Visibility.Collapsed;
             }
-            ViewModel.Source.SortStable((x, y) => string.Compare(x.Name, y.Name));
-            ViewModel.IsBusy = false;
         }
     }
 }
