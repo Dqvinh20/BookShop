@@ -10,21 +10,27 @@ namespace BookShop.ViewModels;
 
 public class CategoriesViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ISampleDataService _sampleDataService;
+    private readonly ICategoriesService _categoriesService;
 
-    public ObservableCollection<SampleOrder> Source { get; } = new ObservableCollection<SampleOrder>();
+    private bool _isBusy;
+    public bool IsBusy {
+        get => _isBusy; set => SetProperty(ref _isBusy, value);
+    }
 
-    public CategoriesViewModel(ISampleDataService sampleDataService)
+    public ObservableCollection<Categories> Source { get; } = new ObservableCollection<Categories>();
+
+    public CategoriesViewModel(ICategoriesService categoriesService)
     {
-        _sampleDataService = sampleDataService;
+        _categoriesService = categoriesService;
     }
 
     public async void OnNavigatedTo(object parameter)
     {
         Source.Clear();
-
         // TODO: Replace with real data.
-        var data = await _sampleDataService.GetGridDataAsync();
+        IsBusy = true;
+        var data = await _categoriesService.GetGridDataAsync();
+        IsBusy = false;
 
         foreach (var item in data)
         {

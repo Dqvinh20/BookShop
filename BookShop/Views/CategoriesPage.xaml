@@ -7,34 +7,78 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <StaticResource x:Key="GridViewItemBackgroundSelected" ResourceKey="AccentFillColorDefaultBrush" />
+        <StaticResource x:Key="GridViewItemBackgroundSelectedPointerOver" ResourceKey="AccentFillColorSecondaryBrush" />
+        <StaticResource x:Key="GridViewItemForegroundSelected" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+        
+        <DataTemplate x:Key="CategoryTemplate">
+            <UserControl PointerPressed="Category_TemplatePointerPressed" >
+                <Grid
+                    Padding="10"
+                    x:Name="CategoryTemplateRoot"
+                    HorizontalAlignment="Stretch"
+                    x:DefaultBindMode="OneWay"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    ToolTipService.ToolTip="{Binding Name}">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="SelectionState">
+                            <VisualState x:Name="Default" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Target="CategoryTemplateRoot.Background" Value="{ThemeResource AccentFillColorDefaultBrush}" />
+                                    <Setter Target="CategoryName.Foreground" Value="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+
+                    <TextBlock
+                        x:Name="CategoryName"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource TitleTextBlockStyle}"
+                        Text="{Binding Name}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
+                </Grid>
+
+
+            </UserControl>
+        </DataTemplate>
+
+       
+    </Page.Resources>
+
     <Grid x:Name="ContentArea">
-        <controls:DataGrid
-            AutoGenerateColumns="False"
-            GridLinesVisibility="Horizontal"
-            ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
-            <controls:DataGrid.Resources>
-                <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
-            </controls:DataGrid.Resources>
-            <controls:DataGrid.Columns>
-                <!-- TODO: Replace column definitions to match real data. Consider adding Header values to Resources.resw. -->
-                <controls:DataGridTextColumn Binding="{Binding OrderID}" Header="OrderID" />
-                <controls:DataGridTextColumn Binding="{Binding OrderDate}" Header="OrderDate" />
-                <controls:DataGridTextColumn Binding="{Binding Company}" Header="Company" />
-                <controls:DataGridTextColumn Binding="{Binding ShipTo}" Header="ShipTo" />
-                <controls:DataGridTextColumn Binding="{Binding OrderTotal}" Header="OrderTotal" />
-                <controls:DataGridTextColumn Binding="{Binding Status}" Header="Status" />
-                <controls:DataGridTemplateColumn Header="Symbol">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <FontIcon
-                                HorizontalAlignment="Left"
-                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                Glyph="{Binding Symbol}"
-                                AutomationProperties.Name="{Binding SymbolName}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
-            </controls:DataGrid.Columns>
-        </controls:DataGrid>
+        <ItemsRepeaterScrollHost>
+            <ScrollViewer x:Name="WrapScrollParent" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+                <ItemsRepeater
+                    x:Name="ItemRepeater"
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Stretch"
+                    MinWidth="100"
+                    ElementIndexChanged="ItemRepeater_ElementIndexChanged"
+                    ElementPrepared="ItemRepeater_ElementPrepared"
+                    ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
+                    ItemTemplate ="{StaticResource CategoryTemplate}"
+                    >
+                    <ItemsRepeater.Layout>
+                        <controls:WrapLayout Orientation="Horizontal" HorizontalSpacing="6" VerticalSpacing="6"/>
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+        </ItemsRepeaterScrollHost>
+
+        <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsBusy, Mode=OneWay}">
+            <StackPanel Orientation="Horizontal" Padding="12">
+                <ProgressRing IsActive="True" Margin="0,0,12,0" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
+                <TextBlock Text="Please wait a moment" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </controls:Loading>
     </Grid>
 </Page>
