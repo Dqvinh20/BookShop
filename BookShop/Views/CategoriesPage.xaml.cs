@@ -1,5 +1,8 @@
-﻿using BookShop.Core.Models;
+﻿using System.Reflection;
+using BookShop.Core.Models;
 using BookShop.ViewModels;
+using ColorCode.Common;
+using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -66,7 +69,80 @@ public sealed partial class CategoriesPage : Page
     private void ItemRepeater_ElementPrepared(ItemsRepeater sender, ItemsRepeaterElementPreparedEventArgs args)
     {
         var newItem = ViewModel.Source[args.Index];
-        SelectedItem = ViewModel.Source[0];
         MoveToSelectionState(args.Element, newItem == SelectedItem);
+    }
+
+    private void OnElementClicked(object sender, RoutedEventArgs e)
+    {
+        switch ((sender as AppBarButton).Label)
+        {
+            case "Add":
+                ShowDialog_Clicked("Add");
+                break;
+            case "Edit":
+                ShowDialog_Clicked("Edit");
+                break;
+            case "Delete":
+                
+                break;
+                
+        }
+    }
+    private async void ShowDialog_Clicked(String title)
+    {
+        ContentDialog dialog = new ContentDialog();
+
+        // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+        dialog.XamlRoot = this.XamlRoot;
+        dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+        dialog.Title = title == "Add" ? "Add new category" : "Edit";
+        dialog.PrimaryButtonText = "Save";
+        dialog.CloseButtonText = "Cancel";
+        dialog.DefaultButton = ContentDialogButton.Primary;
+        TextBox textBox = new TextBox();
+        textBox.Text = title == "Add" ? "" : SelectedItem.Name;
+        dialog.Content = textBox;
+
+        var result = await dialog.ShowAsync();
+        if (result == ContentDialogResult.Primary)
+        {
+            if (ViewModel.Source.FirstOrDefault(c => c.Name == textBox.Text) != null)
+            {
+                ContentDialog dialog1 = new ContentDialog();
+
+                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                dialog.XamlRoot = this.XamlRoot;
+                dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+                dialog.Title = "Error";
+                dialog.PrimaryButtonText = "OK";
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                dialog.Content = "Category already existed";
+
+                await dialog.ShowAsync();
+                return;
+            }
+            var newCategory = new Categories() {
+                Name = textBox.Text,
+                Id = title == "Add" ? null : SelectedItem.Id
+            };
+
+            ViewModel.IsBusy = true;
+            var newData = await App.Repository.Categories.UpsertCategoryAsync(newCategory);
+            foreach (var category in newData)
+            {
+                if (title == "Add")
+                {
+                    ViewModel.Source.Add(category);
+                }
+                else
+                {
+                    var oldIndex = ViewModel.Source.IndexOf(SelectedItem);
+                    ViewModel.Source[oldIndex] = category;
+                    SelectedItem = ViewModel.Source[oldIndex];
+                }
+            }
+            ViewModel.Source.SortStable((x, y) => string.Compare(x.Name, y.Name));
+            ViewModel.IsBusy = false;
+        }
     }
 }
