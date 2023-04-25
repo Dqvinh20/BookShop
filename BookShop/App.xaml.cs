@@ -1,5 +1,6 @@
 ﻿using BookShop.Activation;
 using BookShop.Contracts.Services;
+using BookShop.Core.Api;
 using BookShop.Core.Contracts.Services;
 using BookShop.Core.Services;
 using BookShop.Helpers;
@@ -39,6 +40,10 @@ public partial class App : Application
     }
 
     public static WindowEx MainWindow { get; } = new MainWindow();
+    public static IShopRepository Repository
+    {
+        get; private set;
+    }
 
     public App()
     {
@@ -65,7 +70,6 @@ public partial class App : Application
 
             // Core Services
             services.AddSingleton<ISampleDataService, SampleDataService>();
-            services.AddSingleton<ICategoriesService, CategoriesService>();
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
@@ -108,7 +112,7 @@ public partial class App : Application
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
-
+        Repository = new RestShopRepository();
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
 }

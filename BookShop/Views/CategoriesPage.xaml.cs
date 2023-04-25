@@ -65,7 +65,6 @@ public sealed partial class CategoriesPage : Page
 
     private void ItemRepeater_ElementPrepared(ItemsRepeater sender, ItemsRepeaterElementPreparedEventArgs args)
     {
-        Console.WriteLine(ViewModel.IsBusy);
         var newItem = ViewModel.Source[args.Index];
         SelectedItem = ViewModel.Source[0];
         MoveToSelectionState(args.Element, newItem == SelectedItem);
