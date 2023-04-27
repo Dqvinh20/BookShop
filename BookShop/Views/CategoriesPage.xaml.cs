@@ -139,9 +139,7 @@ public sealed partial class CategoriesPage : Page
                         return;
                     }
                 }
-                Rectangle acrylicArea = AcrylicArea;
 
-                acrylicArea.Visibility = Visibility.Visible;
                 ViewModel.IsBusy = true;
 
 
@@ -176,7 +174,7 @@ public sealed partial class CategoriesPage : Page
                 }
 
                 ViewModel.IsBusy = false;
-                acrylicArea.Visibility = Visibility.Collapsed;
+                //acrylicArea.Visibility = Visibility.Collapsed;
             }
         }
     }

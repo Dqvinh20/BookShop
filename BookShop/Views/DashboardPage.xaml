@@ -4,9 +4,109 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:chart="using:Syncfusion.UI.Xaml.Charts"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea">
-        
+    <Page.Resources>
+        <BrushCollection x:Key="CustomBrushes">
+            <SolidColorBrush Color="#0078DE" />
+            <SolidColorBrush Color="#00CC6A" />
+            <SolidColorBrush Color="#B146C2" />
+            <SolidColorBrush Color="#FFB900" />
+            <!--<SolidColorBrush Color="#7A7574" />-->
+            <SolidColorBrush Color="#E2182F" />
+            <SolidColorBrush Color="#7200E6" />
+            <SolidColorBrush Color="#007F00" />
+            <SolidColorBrush Color="#E3236F" />
+            <SolidColorBrush Color="#FA9901" />
+        </BrushCollection>
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea" Padding="0 0 0 100">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                        
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="400"/>
+                    </VisualState.StateTriggers>
+                        
+                    <VisualState.Setters>
+                        <Setter Target="container.Orientation" Value="Vertical"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <ScrollViewer >
+            <StackPanel x:Name="container" Orientation="Horizontal" >
+                
+            <chart:SfCartesianChart x:Name="BarChart" Header="Sneakers Sold by Brand for three Months"
+                                    >
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis ShowMajorGridLines="False"
+                            Header="Brand"
+                            LabelPlacement="BetweenTicks" />
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis FontFamily="Segoe UI"
+                             Header="Number of items sold(in %)"
+                             Interval="5"
+                             Maximum="40"
+                             Minimum="-40" />
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:ColumnSeries
+                        PaletteBrushes="{StaticResource CustomBrushes}"
+                        EnableAnimation="True" 
+                        ShowDataLabels="True" 
+                        ItemsSource="{x:Bind ViewModel.SneakersDetail, Mode=OneWay}" 
+                        Label="Sneakers sold"
+                        XBindingPath="Brand" 
+                        YBindingPath="ItemsCount">
+                    <chart:ColumnSeries.DataLabelSettings>
+                        <chart:CartesianDataLabelSettings Position="Inner"/>
+                    </chart:ColumnSeries.DataLabelSettings>
+                </chart:ColumnSeries>
+            </chart:SfCartesianChart>
+            <chart:SfCircularChart x:Name="PieChart" Header="Internet usage in World" 
+                                   
+                                   >
+
+                <chart:SfCircularChart.Legend>
+                    <chart:ChartLegend ItemMargin="2" 
+                           BorderThickness="1" 
+                           Placement ="Right" />
+                </chart:SfCircularChart.Legend>
+
+                <chart:PieSeries ItemsSource="{x:Bind ViewModel.SneakersDetail, Mode=OneWay}" 
+                         XBindingPath="Brand" 
+                         YBindingPath="ItemsCount"
+                         Radius="0.7"
+                         PaletteBrushes="{StaticResource CustomBrushes}"
+                         EnableAnimation="True" 
+                         ShowDataLabels="True"
+                         GroupMode="Value">
+                    <chart:PieSeries.DataLabelSettings>
+                        <chart:CircularDataLabelSettings ShowConnectorLine="True" 
+                                                 ConnectorType="Line" 
+                                                 Position="OutsideExtended"/>
+                    </chart:PieSeries.DataLabelSettings>
+
+                </chart:PieSeries>
+            </chart:SfCircularChart>
+
+        </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Page>
