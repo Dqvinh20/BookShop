@@ -16,6 +16,11 @@
     <UserSecretsId>afd0759d-b768-405b-8edb-09eb082f1495</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Custom\PaginationControl.xaml" />
+    <None Remove="Views\AddProductPage.xaml" />
+    <None Remove="Views\PaginationControl.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Views\SplashPage.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +53,15 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\AddProductPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Custom\PaginationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\PaginationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\SplashPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
