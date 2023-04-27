@@ -14,4 +14,19 @@ public interface IShopRepository
     {
         get;
     }
+    /// <summary>
+    /// Returns the products repository.
+    /// </summary>
+    IProductsRepository Products
+    {
+        get;
+    }
+
+    /// <summary>
+    /// Returns the storage repository.
+    /// </summary>
+    IStorageRepository Storage
+    {
+        get;
+    }
 }

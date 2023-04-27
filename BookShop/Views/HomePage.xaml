@@ -7,37 +7,140 @@
     xmlns:animations="using:CommunityToolkit.WinUI.UI.Animations"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:models="using:BookShop.Core.Models"
+    xmlns:custom="using:BookShop.Custom"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea">
-        <controls:AdaptiveGridView
-            animations:Connected.ListItemElementName="itemThumbnail"
-            animations:Connected.ListItemKey="animationKeyContentGrid"
-            DesiredWidth="180"
-            ItemHeight="160"
-            IsItemClickEnabled="True"
-            ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
-            ItemsSource="{x:Bind ViewModel.Source,Mode=OneWay}"
-            SelectionMode="None"
-            StretchContentForSingleRow="False">
-            <controls:AdaptiveGridView.ItemTemplate>
-                <DataTemplate x:DataType="models:SampleOrder">
-                    <Grid
-                        x:Name="itemThumbnail"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <FontIcon
-                                Glyph="{x:Bind Symbol}"
-                                AutomationProperties.Name="{x:Bind SymbolName}" />
-                            <TextBlock
-                                Margin="{StaticResource XXSmallTopMargin}"
-                                HorizontalAlignment="Center"
-                                Style="{ThemeResource BodyTextStyle}"
-                                Text="{x:Bind Company}" />
+    <Page.Resources>
+        <Style x:Key="CustomExpanderHeaderStyle" TargetType="ToggleButton">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <DataTemplate x:Key="CategoryTokenTemplate" x:DataType="models:Categories">
+            <TextBlock
+                    x:Name="CategoryName"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Text="{Binding Name}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="NoWrap" 
+                />
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea" RowDefinitions="*,Auto">
+        <RelativePanel>
+            <StackPanel x:Name="topAppBar" Orientation="Vertical" 
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        >
+                <AutoSuggestBox 
+                    PlaceholderText="Type a book name"
+                    QueryIcon="Find"
+                    />
+                <StackPanel Orientation = "Horizontal" HorizontalAlignment="Right" Margin="0,12,0,4">
+                    <CommandBar Background="Transparent" DefaultLabelPosition="Right" IsSticky="True" >
+                        <AppBarButton Icon="Import" Label="Import csv" Click="{x:Bind ViewModel.OnImportButtonClick}"
+                                  Tag="0"
+                    />
+                        <AppBarButton Icon="Add" Label="Add" Click="{x:Bind ViewModel.OnAddProductClick}"
+                                  Tag="1"
+                    />
+                    </CommandBar>
+
+                    <controls:Expander
+                           x:Name="Filter" VerticalAlignment="Center" Margin="0"
+                           Header="Filter"
+                           HorizontalContentAlignment="Right"
+                           HorizontalAlignment="Right"
+                           ExpandDirection="Down"
+                           HeaderStyle="{StaticResource CustomExpanderHeaderStyle}"
+                           >
+                        <StackPanel MinWidth="100" Width="{Binding ElementName=topAppBar, Path=ActualWidth}" MaxWidth="500" Orientation="Vertical" Padding="20">
+                            <controls:TokenizingTextBox
+                                    Header="Categories"
+                                    x:Name="TokenBoxCategories"
+                                    PlaceholderText="Select categories"
+                                    HorizontalAlignment="Stretch"
+                                    TextMemberPath="Text"
+                                    TokenDelimiter=","
+                                    TokenItemTemplate="{StaticResource CategoryTokenTemplate}"
+                                    SuggestedItemTemplate="{StaticResource CategoryTokenTemplate}"
+                                    TextChanged="AutoSuggestBox_TextChanged"
+                                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                                    QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+                                >
+                                <!--ItemsSource="{Binding SelectedCategories}"-->
+
+                                <controls:TokenizingTextBox.QueryIcon>
+                                    <SymbolIconSource Symbol="Find"/>
+                                </controls:TokenizingTextBox.QueryIcon>
+                            </controls:TokenizingTextBox>
+                            <Grid Padding="0, 20,0 ,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <NumberBox Grid.Column="0" IsWrapEnabled="true" Header="Min Price" Value="NaN" Minimum="0" />
+                                <NumberBox Grid.Column="1" IsWrapEnabled="true" Header="Max Price" Value="NaN" Minimum="0" Margin="10, 0, 0, 0"/>
+                            </Grid>
+                            <Button Content="Clear filter" HorizontalAlignment="Center"/>
                         </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </controls:AdaptiveGridView.ItemTemplate>
-        </controls:AdaptiveGridView>
+                    </controls:Expander>
+                </StackPanel>
+            </StackPanel>
+            <controls:AdaptiveGridView
+                    x:Name="productGridView"
+                    RelativePanel.Below="topAppBar"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    animations:Connected.ListItemElementName="itemThumbnail"
+                    animations:Connected.ListItemKey="animationKeyContentGrid"
+                    DesiredWidth="300"
+                    IsItemClickEnabled="True"
+                    ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
+                    ItemsSource="{x:Bind ViewModel.FilteredItem,Mode=OneWay}"
+                    SelectionMode="Single"
+                    StretchContentForSingleRow="False"
+                    >
+                <controls:AdaptiveGridView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <Grid
+                        x:Name="itemThumbnail"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        >
+                            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Padding="12">
+                                <Image Source="{x:Bind Image}" Stretch="Fill" Height="200"/>
+                                <TextBlock
+                                        HorizontalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        MaxLines="3"
+                                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                                        Text="{x:Bind Name}" />
+
+                                <TextBlock
+                                        HorizontalAlignment="Center"
+                                        TextWrapping="NoWrap"
+                                        Style="{ThemeResource BodyTextStyle}"
+                                        Text="{x:Bind Price}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </controls:AdaptiveGridView.ItemTemplate>
+            </controls:AdaptiveGridView>
+
+           
+        </RelativePanel>
+        <custom:PaginationControl 
+                RelativePanel.Below="productGridView"
+                RelativePanel.AlignBottomWithPanel="True"
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                Margin="{StaticResource SmallTopBottomMargin}"
+                MaxPage="5"
+                Grid.Row="1"
+                MinPage="1"
+                HorizontalAlignment="Center"
+             />
     </Grid>
 </Page>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection.PortableExecutable;
@@ -70,7 +71,7 @@ internal class HttpHelper
             client.DefaultRequestHeaders.Add("apikey", accessToken);
             var response = await client.PostAsync(controller, new JsonStringContent(body));
             string json = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(json);
+            Debug.WriteLine(json);
             TResult obj = JsonConvert.DeserializeObject<TResult>(json);
             return obj;
         }

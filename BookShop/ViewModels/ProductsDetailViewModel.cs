@@ -9,9 +9,9 @@ namespace BookShop.ViewModels;
 public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
 {
     private readonly ISampleDataService _sampleDataService;
-    private SampleOrder? _item;
+    private Product? _item;
 
-    public SampleOrder? Item
+    public Product? Item
     {
         get => _item;
         set => SetProperty(ref _item, value);
@@ -22,12 +22,11 @@ public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
         _sampleDataService = sampleDataService;
     }
 
-    public async void OnNavigatedTo(object parameter)
+    public void OnNavigatedTo(object parameter)
     {
-        if (parameter is long orderID)
+        if (parameter is Product product)
         {
-            var data = await _sampleDataService.GetContentGridDataAsync();
-            Item = data.First(i => i.OrderID == orderID);
+            Item = product;
         }
     }
 
