@@ -21,4 +21,9 @@ public class Categories
 
     [JsonProperty("updated_at")]
     public DateTime? UpdatedAt{ get; set; }
+
+    public override string ToString()
+    {
+        return $"Category(Id = {Id}, Name = {Name}, CreateAt = {CreatedAt ?? null}, UpdatedAt = {UpdatedAt ?? null})";
+    }
 }

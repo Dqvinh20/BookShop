@@ -17,6 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Custom\PaginationControl.xaml" />
+    <None Remove="Custom\ProductCountControl.xaml" />
     <None Remove="Views\AddProductPage.xaml" />
     <None Remove="Views\PaginationControl.xaml" />
   </ItemGroup>
@@ -39,10 +40,12 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.230118.102" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     <PackageReference Include="WinUIEx" Version="2.1" />
   </ItemGroup>
 
@@ -53,6 +56,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Custom\ProductCountControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\AddProductPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

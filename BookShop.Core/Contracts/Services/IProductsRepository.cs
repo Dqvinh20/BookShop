@@ -25,6 +25,12 @@ public interface IProductsRepository
     Task<IEnumerable<Product>> UpsertProductAsync(Product product);
 
     /// <summary>
+    /// Adds a list products if the products does not exist, updates the 
+    /// existing products otherwise.
+    /// </summary>
+    Task<IEnumerable<Product>> UpsertProductAsync(List<Product> products);
+
+    /// <summary>
     /// Deletes a products.
     /// </summary>
     Task DeleteProductAsync(int id);

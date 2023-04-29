@@ -28,7 +28,14 @@ public class RestCategoriesRepository : ICategoriesRepository
         List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
         headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
         headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
-     
         return await _http.PostAsync<Categories, IEnumerable<Categories>>(_controller, categories, _accessToken, headers);
+    }
+
+    public async Task<IEnumerable<Categories>> UpsertCategoryAsync(List<Categories> categories)
+    {
+        List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+        headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
+        headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
+        return await _http.PostAsync<List<Categories>, IEnumerable<Categories>>(_controller, categories, _accessToken, headers);
     }
 }

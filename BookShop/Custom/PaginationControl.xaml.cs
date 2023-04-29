@@ -100,16 +100,23 @@ namespace BookShop.Custom
         public int MinPage
         {
             get => (int)GetValue(PageCountProperty);
-            set => SetValue(PageCountProperty, value);
+            set
+            {
+                SetValue(PageCountProperty, value);
+                UpdateButtons();
+            }
         }
 
         public int MaxPage
         {
             get => (int)GetValue(MaxPageProperty);
-            set => SetValue(MaxPageProperty, value);
+            set
+            {
+                SetValue(MaxPageProperty, value);
+                UpdateButtons();
+            }
         }
-
-        private void UpdateButtons()
+        public void UpdateButtons()
         {
             PreviousPageButton.IsEnabled = (CurrentPage > MinPage) && IsPreviousPageButtonEnabled;
             NextPageButton.IsEnabled = (CurrentPage < MaxPage) && IsNextPageButtonEnabled;

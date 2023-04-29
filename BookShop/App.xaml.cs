@@ -12,6 +12,7 @@ using BookShop.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace BookShop;
 
@@ -48,7 +49,7 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-
+        System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         Host = Microsoft.Extensions.Hosting.Host.
         CreateDefaultBuilder().
         UseContentRoot(AppContext.BaseDirectory).

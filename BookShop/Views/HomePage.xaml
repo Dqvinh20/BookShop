@@ -8,9 +8,11 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:models="using:BookShop.Core.Models"
     xmlns:custom="using:BookShop.Custom"
+    xmlns:helpers="using:BookShop.Helpers"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <helpers:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
         <Style x:Key="CustomExpanderHeaderStyle" TargetType="ToggleButton">
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
@@ -35,61 +37,88 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"
                         >
-                <AutoSuggestBox 
-                    PlaceholderText="Type a book name"
-                    QueryIcon="Find"
+                <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,Auto">
+                    <AutoSuggestBox 
+                        Padding="{StaticResource MediumTopBottomMargin}"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        PlaceholderText="Type a book name"
+                        QueryIcon="Find"
+                        UpdateTextOnSelect="False"
+                        TextChanged="{x:Bind ViewModel.BookSearch_TextChanged, Mode=OneWay}"
+                        QuerySubmitted="{x:Bind ViewModel.BookSearch_QuerySubmitted, Mode=OneWay}"
+                        SuggestionChosen="{x:Bind ViewModel.BookSearch_SuggestionChosen, Mode=OneWay}"
                     />
-                <StackPanel Orientation = "Horizontal" HorizontalAlignment="Right" Margin="0,12,0,4">
-                    <CommandBar Background="Transparent" DefaultLabelPosition="Right" IsSticky="True" >
-                        <AppBarButton Icon="Import" Label="Import csv" Click="{x:Bind ViewModel.OnImportButtonClick}"
-                                  Tag="0"
-                    />
-                        <AppBarButton Icon="Add" Label="Add" Click="{x:Bind ViewModel.OnAddProductClick}"
-                                  Tag="1"
-                    />
-                    </CommandBar>
 
-                    <controls:Expander
-                           x:Name="Filter" VerticalAlignment="Center" Margin="0"
-                           Header="Filter"
-                           HorizontalContentAlignment="Right"
-                           HorizontalAlignment="Right"
-                           ExpandDirection="Down"
-                           HeaderStyle="{StaticResource CustomExpanderHeaderStyle}"
+                    <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right" IsSticky="True" >
+                        <AppBarButton Icon="Import" Label="Import" Click="{x:Bind OnImportButtonClick}" />
+                        <AppBarButton Icon="Add" Label="Add" Click="{x:Bind ViewModel.OnAddProductClick}" />
+                    </CommandBar>
+                </Grid>
+                <controls:Expander
+                            x:Name="Filter" VerticalAlignment="Center" Margin="0"
+                            Header="Filter"
+                            HorizontalContentAlignment="Right"
+                            HorizontalAlignment="Right"
+                            ExpandDirection="Down"
+                            HeaderStyle="{StaticResource CustomExpanderHeaderStyle}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
                            >
-                        <StackPanel MinWidth="100" Width="{Binding ElementName=topAppBar, Path=ActualWidth}" MaxWidth="500" Orientation="Vertical" Padding="20">
-                            <controls:TokenizingTextBox
+                    <StackPanel MinWidth="100"  Orientation="Vertical" Padding="12">
+                        <controls:TokenizingTextBox
                                     Header="Categories"
                                     x:Name="TokenBoxCategories"
                                     PlaceholderText="Select categories"
                                     HorizontalAlignment="Stretch"
-                                    TextMemberPath="Text"
+                                    TextMemberPath="Name"
                                     TokenDelimiter=","
                                     TokenItemTemplate="{StaticResource CategoryTokenTemplate}"
                                     SuggestedItemTemplate="{StaticResource CategoryTokenTemplate}"
-                                    TextChanged="AutoSuggestBox_TextChanged"
-                                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"
-                                    QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                                 >
-                                <!--ItemsSource="{Binding SelectedCategories}"-->
-
-                                <controls:TokenizingTextBox.QueryIcon>
-                                    <SymbolIconSource Symbol="Find"/>
-                                </controls:TokenizingTextBox.QueryIcon>
-                            </controls:TokenizingTextBox>
-                            <Grid Padding="0, 20,0 ,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <NumberBox Grid.Column="0" IsWrapEnabled="true" Header="Min Price" Value="NaN" Minimum="0" />
-                                <NumberBox Grid.Column="1" IsWrapEnabled="true" Header="Max Price" Value="NaN" Minimum="0" Margin="10, 0, 0, 0"/>
-                            </Grid>
-                            <Button Content="Clear filter" HorizontalAlignment="Center"/>
+                            <controls:TokenizingTextBox.QueryIcon>
+                                <SymbolIconSource Symbol="Find"/>
+                            </controls:TokenizingTextBox.QueryIcon>
+                        </controls:TokenizingTextBox>
+                        <Grid Margin="{StaticResource SmallTopBottomMargin}" ColumnDefinitions="*,*" >
+                            <NumberBox 
+                                x:Name="MinPriceNumberBox" 
+                                Grid.Column="0" 
+                                IsWrapEnabled="true"
+                                Header="Min Price"
+                                Minimum="0" 
+                                Maximum="{x:Bind ViewModel.MaxPrice, Mode=OneWay}"
+                                Value="{x:Bind ViewModel.MinPrice, Mode=TwoWay}"
+                                Margin="{StaticResource SmallRightMargin}"
+                                               />
+                            <NumberBox 
+                                x:Name="MaxPriceNumberBox"
+                                Grid.Column="1"
+                                IsWrapEnabled="true"
+                                Header="Max Price" 
+                                Minimum="{x:Bind ViewModel.MinPrice, Mode=OneWay}"
+                                Value="{x:Bind ViewModel.MaxPrice, Mode=TwoWay}"
+                               />
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Apply filter" Click="OnApplyFilterButtonClick" Margin="{StaticResource SmallRightMargin}"/>
+                            <Button Content="Clear filter" Click="OnClearFilterButtonClick"/>
                         </StackPanel>
-                    </controls:Expander>
-                </StackPanel>
+
+                    </StackPanel>
+                </controls:Expander>
             </StackPanel>
+            <TextBlock 
+                    HorizontalAlignment="Center"
+                    RelativePanel.Below="topAppBar"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True"
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="No results" x:DefaultBindMode="OneWay"
+                    Visibility="{x:Bind ViewModel.HasResult, Converter={StaticResource InvertedVisibilityConverter}}"
+                ></TextBlock>
             <controls:AdaptiveGridView
                     x:Name="productGridView"
                     RelativePanel.Below="topAppBar"
@@ -100,7 +129,7 @@
                     DesiredWidth="300"
                     IsItemClickEnabled="True"
                     ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
-                    ItemsSource="{x:Bind ViewModel.FilteredItem,Mode=OneWay}"
+                    ItemsSource="{x:Bind ViewModel.FilteredItems, Mode=OneWay}"
                     SelectionMode="Single"
                     StretchContentForSingleRow="False"
                     >
@@ -129,18 +158,38 @@
                     </DataTemplate>
                 </controls:AdaptiveGridView.ItemTemplate>
             </controls:AdaptiveGridView>
-
-           
         </RelativePanel>
-        <custom:PaginationControl 
-                RelativePanel.Below="productGridView"
-                RelativePanel.AlignBottomWithPanel="True"
-                RelativePanel.AlignHorizontalCenterWithPanel="True"
-                Margin="{StaticResource SmallTopBottomMargin}"
-                MaxPage="5"
-                Grid.Row="1"
+
+        <Grid  
+            Visibility="{x:Bind ViewModel.IsLoading, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}"
+            Grid.Row="1"
+            Margin="{StaticResource SmallTopBottomMargin}"
+            RelativePanel.Below="productGridView"
+            RelativePanel.AlignBottomWithPanel="True"
+            ColumnDefinitions="*,*"
+            >
+            <custom:ProductCountControl 
+                x:Name="ProductCountControl"
+                CurrentProductCount="{x:Bind ViewModel.ItemPerPage, Mode=TwoWay}"
+                MaxProductCount="10"
+                MinProductCount="1"
+                HorizontalAlignment="Left"
+                />
+            <custom:PaginationControl
+                x:Name ="PaginationControl"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                MaxPage="{x:Bind ViewModel.MaxPage, Mode=OneWay}"
                 MinPage="1"
-                HorizontalAlignment="Center"
+                CurrentPage="{x:Bind ViewModel.CurrentPage, Mode=TwoWay}"
              />
+        </Grid>
+        
+        <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}">
+            <StackPanel Orientation="Horizontal" Padding="12">
+                <ProgressRing IsActive="True" Margin="0,0,12,0" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
+                <TextBlock Text="Please wait a moment" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </controls:Loading>
     </Grid>
 </Page>

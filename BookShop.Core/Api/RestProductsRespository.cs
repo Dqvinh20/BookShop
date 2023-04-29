@@ -21,13 +21,21 @@ public class RestProductsRespository : IProductsRepository
         var data = await _http.GetAsync<IEnumerable<Product>>($"{_controller}?select=*,categories(*),id=eq.{id}", _accessToken, null);
         return data.FirstOrDefault();
     }
+
     public async Task<IEnumerable<Product>> UpsertProductAsync(Product product)
     {
         List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
         headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
         headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
-        
         return await _http.PostAsync<Product, IEnumerable<Product>>(_controller, product, _accessToken, headers);
+    }
+
+    public async Task<IEnumerable<Product>> UpsertProductAsync(List<Product> products)
+    {
+        List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+        headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
+        headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
+        return await _http.PostAsync<List<Product>, IEnumerable<Product>>(_controller, products, _accessToken, headers);
     }
 
 }
