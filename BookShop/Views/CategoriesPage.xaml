@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:media="using:Microsoft.UI.Xaml.Media"
     xmlns:helpers="using:BookShop.Helpers"
     mc:Ignorable="d">
 
@@ -52,8 +53,8 @@
 
             </UserControl>
         </DataTemplate>
+        <media:AcrylicBrush x:Key="CustomAcrylicInAppBrush" TintOpacity="0.8" TintColor="Transparent" FallbackColor="Black"/>
 
-       
     </Page.Resources>
     
 
@@ -66,7 +67,7 @@
                 <AppBarButton x:Name="deleteButton" Icon="Delete" Label="Delete" Click="OnElementClicked" IsEnabled="{x:Bind ViewModel.IsNotEmpty, Mode=OneWay}"/>
                  
             </CommandBar>
-        
+
             <ItemsRepeaterScrollHost>
                 <ScrollViewer x:Name="WrapScrollParent" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
                     <ItemsRepeater
@@ -86,6 +87,7 @@
                 </ScrollViewer>
             </ItemsRepeaterScrollHost>
         </StackPanel>
+        <Rectangle x:Name="AcrylicArea" Fill ="{ThemeResource CustomAcrylicInAppBrush}" Visibility="Collapsed"/>
 
         <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsBusy, Mode=OneWay}">
             <StackPanel Orientation="Horizontal" Padding="12">
