@@ -10,7 +10,6 @@ namespace BookShop.Core.Models;
 [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class Product
 {
-
     [JsonProperty("id")]
     public int? Id
     {
@@ -63,6 +62,7 @@ public class Product
     {
         get; set;
     } = string.Empty;
+
     [JsonProperty("price")]
     public int Price
     {
@@ -116,4 +116,13 @@ public class Product
     }
 
     public bool IsSameProduct(object obj) => obj is Product product && Name == product.Name && Author == product.Author && PublishedYear == product.PublishedYear && Publisher == product.Publisher && CategoryId == product.CategoryId;
+
+    public override string ToString()
+    {
+        return $"Product(Id = {Id}, Name = {Name}, Author = {Author}, Publisher = {Publisher}, " +
+            $"PublishedYear = {PublishedYear}, Price = {Price}, OrgPrice = {OriginalPrice}, " +
+            $"Quantity = {Quantity}, OrgQuantity = {OriginalQuantity}, " +
+            $"Discount = {Discount}, CategoryId = {CategoryId}, " +
+            $"Catogory={Category ?? null})";
+    }
 }

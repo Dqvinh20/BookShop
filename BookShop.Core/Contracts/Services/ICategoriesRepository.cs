@@ -30,6 +30,12 @@ public interface ICategoriesRepository
     Task<IEnumerable<Categories>> UpsertCategoryAsync(Categories categories);
 
     /// <summary>
+    /// Adds a list categories if the categories does not exist, updates the 
+    /// existing categories otherwise.
+    /// </summary>
+    Task<IEnumerable<Categories>> UpsertCategoryAsync(List<Categories> categories);
+
+    /// <summary>
     /// Deletes a categories.
     /// </summary>
     Task DeleteCategoryAsync(int id);
