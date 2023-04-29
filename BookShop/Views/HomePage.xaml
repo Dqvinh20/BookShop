@@ -9,6 +9,7 @@
     xmlns:models="using:BookShop.Core.Models"
     xmlns:custom="using:BookShop.Custom"
     xmlns:helpers="using:BookShop.Helpers"
+    xmlns:media="using:CommunityToolkit.WinUI.UI.Media"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -16,7 +17,7 @@
         <Style x:Key="CustomExpanderHeaderStyle" TargetType="ToggleButton">
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
-
+        
         <DataTemplate x:Key="CategoryTokenTemplate" x:DataType="models:Categories">
             <TextBlock
                     x:Name="CategoryName"
@@ -126,6 +127,7 @@
                     RelativePanel.AlignRightWithPanel="True"
                     animations:Connected.ListItemElementName="itemThumbnail"
                     animations:Connected.ListItemKey="animationKeyContentGrid"
+                    animations:ItemsReorderAnimation.Duration="00:00:00.4000000"
                     DesiredWidth="300"
                     IsItemClickEnabled="True"
                     ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
@@ -149,6 +151,7 @@
                                         Text="{x:Bind Name}" />
 
                                 <TextBlock
+                                    
                                         HorizontalAlignment="Center"
                                         TextWrapping="NoWrap"
                                         Style="{ThemeResource BodyTextStyle}"
@@ -186,10 +189,16 @@
         </Grid>
         
         <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}">
+            <controls:Loading.Background>
+                <media:AcrylicBrush  
+                    BlurAmount="8"
+                    TintOpacity="0.4" TintColor="Black"  />
+            </controls:Loading.Background>
             <StackPanel Orientation="Horizontal" Padding="12">
                 <ProgressRing IsActive="True" Margin="0,0,12,0" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
                 <TextBlock Text="Please wait a moment" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
         </controls:Loading>
+        
     </Grid>
 </Page>
