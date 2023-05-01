@@ -17,6 +17,8 @@ using System.Text;
 using System.Security.Cryptography;
 using BookShop.Contracts.Services;
 using BookShop.Services;
+using BookShop.Core.Models;
+using Microsoft.UI.Xaml.Navigation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,10 +39,11 @@ public sealed partial class LoginPage : Page
         ViewModel = viewModel;
         InitializeComponent();
     }
-    private void OnLoaded(object sender, RoutedEventArgs e)
+
+    private async void OnLoaded(object sender, RoutedEventArgs e)
     {
-        ViewModel.Username = "123"; 
-        //ViewModel.Username = await _localSettingsService.ReadSettingAsync<String>("username");
+        var themeService = App.GetService<IThemeSelectorService>();
+        await themeService.SetRequestedThemeAsync();
     }
 
     private void RevealModeCheckbox_Changed(object sender, RoutedEventArgs e)
@@ -54,50 +57,4 @@ public sealed partial class LoginPage : Page
             passworBoxWithRevealmode.PasswordRevealMode = PasswordRevealMode.Hidden;
         }
     }
-
-    private void StayLoggedCheckbox_Changed(object sender, RoutedEventArgs e)
-    {
-        
-    }
-
-    private bool _login()
-    {
-        return true;
-    }
-
-    private async void LoginButton_Click(object sender, RoutedEventArgs e)
-    {
-        //var config = ConfigurationManager.OpenExeConfiguration(
-        //                ConfigurationUserLevel.None);
-        
-        //Tuple<String, String> result = _encryptPassword();
-        //config.AppSettings.Settings["Username"].Value = ViewModel.Username;
-        //config.AppSettings.Settings["Password"].Value = result.Item1;
-        //config.AppSettings.Settings["Entropy"].Value = result.Item2;
-        //config.AppSettings.Settings["IsStayLogged"].Value = stayLoggedIn.IsChecked == true ? "true" : "false";
-        //config.Save(ConfigurationSaveMode.Full);
-        //ConfigurationManager.RefreshSection("appSettings");
-    }
-
-    private Tuple<String, String> _encryptPassword()
-    {
-        var passwordInBytes = Encoding.UTF8.GetBytes(ViewModel.Password);
-        var entropy = new byte[20];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(entropy);
-        }
-
-        var cypherText = ProtectedData.Protect(
-            passwordInBytes,
-            entropy,
-            DataProtectionScope.CurrentUser
-        );
-
-        var passwordIn64 = Convert.ToBase64String(cypherText);
-        var entropyIn64 = Convert.ToBase64String(entropy);
-        
-        return Tuple.Create(passwordIn64, entropyIn64);
-    }
-   
 }

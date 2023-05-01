@@ -1,4 +1,5 @@
-﻿using BookShop.Activation;
+﻿using System.Configuration;
+using BookShop.Activation;
 using BookShop.Contracts.Services;
 using BookShop.Core.Api;
 using BookShop.Core.Contracts.Services;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Windows.Storage;
 
 namespace BookShop;
 
@@ -46,10 +48,23 @@ public partial class App : Application
         get; private set;
     }
 
+    /// <summary>
+    /// Build rest api call respository
+    /// </summary>
+    private void BuildRestRespository()
+    {
+        var config = ConfigurationManager.OpenExeConfiguration(
+                        ConfigurationUserLevel.None);
+        var baseUrl = config.AppSettings.Settings["BaseUrl"].Value;
+        var apikey = config.AppSettings.Settings["apikey"].Value;
+        Repository = new RestShopRepository(baseUrl, apikey);
+    }
+
     public App()
     {
         InitializeComponent();
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
         Host = Microsoft.Extensions.Hosting.Host.
         CreateDefaultBuilder().
         UseContentRoot(AppContext.BaseDirectory).
@@ -74,13 +89,17 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
-            services.AddTransient<AddProductViewModel>();
-            services.AddTransient<AddProductPage>();
-            services.AddTransient<CategoriesViewModel>();
-            services.AddTransient<CategoriesPage>();
+            services.AddTransient<SplashViewModel>();
             services.AddTransient<SplashPage>();
+
             services.AddTransient<LoginViewModel>();
             services.AddTransient<LoginPage>();
+
+            services.AddTransient<AddProductViewModel>();
+            services.AddTransient<AddProductPage>();
+
+            services.AddTransient<CategoriesViewModel>();
+            services.AddTransient<CategoriesPage>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
             services.AddTransient<StatisticsViewModel>();
@@ -102,7 +121,7 @@ public partial class App : Application
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
-
+        BuildRestRespository();
         UnhandledException += App_UnhandledException;
     }
 
@@ -110,12 +129,13 @@ public partial class App : Application
     {
         // TODO: Log and handle exceptions as appropriate.
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
+        Console.WriteLine(sender);
+        Console.WriteLine(e.Message);
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
-        Repository = new RestShopRepository();
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
 }

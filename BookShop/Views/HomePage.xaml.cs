@@ -17,7 +17,7 @@ namespace BookShop.Views;
 
 public sealed partial class HomePage : Page
 {
-    private List<Categories> _categories;
+    private List<Categories>? _categories;
     private AdvancedCollectionView _acv;
     public ProductsViewModel ViewModel
     {
@@ -61,15 +61,7 @@ public sealed partial class HomePage : Page
 
     public async Task ShowDialog(string title, string message)
     {
-        ContentDialog dialog = new ContentDialog();
-
-        dialog.XamlRoot = this.XamlRoot;
-        dialog.Title = title;
-        dialog.PrimaryButtonText = "OK";
-        dialog.DefaultButton = ContentDialogButton.Primary;
-        dialog.Content = message;
-
-        var result = await dialog.ShowAsync();
+        await App.MainWindow.ShowMessageDialogAsync(message, title);
     }
 
     #region Filter Opts
@@ -258,7 +250,7 @@ public sealed partial class HomePage : Page
                 PublishedYear = Convert.ToInt32(products.Rows[i][7].ToString()!.Trim()),
                 Price = Convert.ToInt32(products.Rows[i][8].ToString()!.Trim()),
                 OriginalPrice = Convert.ToInt32(products.Rows[i][9].ToString()!.Trim()),
-                Discount = Convert.ToInt32(products.Rows[i][10].ToString()!.Trim()),
+                Discount = Convert.ToDouble(products.Rows[i][10].ToString()!.Trim()),
                 OriginalQuantity = Convert.ToInt32(products.Rows[i][11].ToString()!.Trim()),
                 Quantity = Convert.ToInt32(products.Rows[i][11].ToString()!.Trim()),
                 CategoryId = Convert.ToInt32(products.Rows[i][12].ToString()!.Trim())

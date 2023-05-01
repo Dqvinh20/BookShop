@@ -5,7 +5,7 @@ using BookShop.Contracts.ViewModels;
 using BookShop.Helpers;
 
 using CommunityToolkit.WinUI.UI.Animations;
-
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
@@ -18,7 +18,6 @@ public class NavigationService : INavigationService
     private readonly IPageService _pageService;
     private object? _lastParameterUsed;
     private Frame? _frame;
-
     public event NavigatedEventHandler? Navigated;
 
     public Frame? Frame
@@ -71,6 +70,7 @@ public class NavigationService : INavigationService
         if (CanGoBack)
         {
             var vmBeforeNavigation = _frame.GetPageViewModel();
+            Console.WriteLine(vmBeforeNavigation);
             _frame.GoBack();
             if (vmBeforeNavigation is INavigationAware navigationAware)
             {
@@ -100,7 +100,6 @@ public class NavigationService : INavigationService
                     navigationAware.OnNavigatedFrom();
                 }
             }
-
             return navigated;
         }
 

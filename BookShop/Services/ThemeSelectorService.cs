@@ -1,7 +1,10 @@
 ﻿using BookShop.Contracts.Services;
 using BookShop.Helpers;
-
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Windows.ApplicationModel;
+using WinUIEx;
 
 namespace BookShop.Services;
 
@@ -9,7 +12,7 @@ public class ThemeSelectorService : IThemeSelectorService
 {
     private const string SettingsKey = "AppBackgroundRequestedTheme";
 
-    public ElementTheme Theme { get; set; } = ElementTheme.Default;
+    public ElementTheme Theme { get; set; } = ElementTheme.Light;
 
     private readonly ILocalSettingsService _localSettingsService;
 
@@ -27,7 +30,6 @@ public class ThemeSelectorService : IThemeSelectorService
     public async Task SetThemeAsync(ElementTheme theme)
     {
         Theme = theme;
-
         await SetRequestedThemeAsync();
         await SaveThemeInSettingsAsync(Theme);
     }
@@ -50,8 +52,7 @@ public class ThemeSelectorService : IThemeSelectorService
         {
             return cacheTheme;
         }
-
-        return ElementTheme.Default;
+        return ElementTheme.Light;
     }
 
     private async Task SaveThemeInSettingsAsync(ElementTheme theme)

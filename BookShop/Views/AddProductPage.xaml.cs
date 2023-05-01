@@ -1,27 +1,15 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using BookShop.ViewModels;
 using BookShop.Core.Models;
-using System.Security.Policy;
 using BookShop.Contracts.Services;
-using CommunityToolkit.WinUI.UI.Animations;
 using Windows.Storage.Pickers;
 using Windows.Globalization.NumberFormatting;
+using Windows.Globalization;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,7 +21,7 @@ namespace BookShop.Views;
 /// </summary>
 public sealed partial class AddProductPage : Page
 {
-    private List<Categories> _categories;
+    private List<Categories>? _categories;
     public AddProductViewModel ViewModel { get; }
 
     public AddProductPage()
@@ -46,26 +34,16 @@ public sealed partial class AddProductPage : Page
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         _categories = (List<Categories>) await App.Repository.Categories.GetAllCategoriesAsync();
+        SetNumberBoxNumberFormatter();
     }
 
     private void SetNumberBoxNumberFormatter()
     {
-        IncrementNumberRounder rounder = new IncrementNumberRounder();
-        rounder.Increment = 0.25;
-        rounder.RoundingAlgorithm = RoundingAlgorithm.RoundUp;
-
-        DecimalFormatter formatter = new DecimalFormatter();
-        formatter.IntegerDigits = 1;
-        formatter.FractionDigits = 2;
-        formatter.NumberRounder = rounder;
-
-        foreach(var numberBox in productForm.Children)
+        discountNumberBox.NumberFormatter = new PercentFormatter()
         {
-            if (numberBox is NumberBox ins)
-            {
-                ins.NumberFormatter = formatter;
-            }
-        }
+            FractionDigits = 0,
+            IntegerDigits = 1,
+        };
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -126,6 +104,7 @@ public sealed partial class AddProductPage : Page
         }
         else
         {
+            sender.Text = "";
             ViewModel.Item.CategoryId = -1;
         }
     }
@@ -139,32 +118,17 @@ public sealed partial class AddProductPage : Page
         }
         else
         {
+            sender.Text = "";
             ViewModel.Item.CategoryId = -1;
         }
     }
-
-    private async void _showInfoDialog(string title, string message)
-    {
-        ContentDialog dialog = new ContentDialog();
-
-        // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-        dialog.XamlRoot = this.XamlRoot;
-        dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-        dialog.Title = title;
-        dialog.PrimaryButtonText = "OK";
-        dialog.DefaultButton = ContentDialogButton.Primary;
-        dialog.Content = message;
-
-        var result = await dialog.ShowAsync();
-    }
-
 
     private async void OnAddProductClick(object sender, RoutedEventArgs e)
     {
         string message = string.Empty;
         if (!ViewModel.ValidateField(ref message))
         {
-            _showInfoDialog("Missing Fields", message);
+            await App.MainWindow.ShowMessageDialogAsync(message, "Missing Fields");
             return;
         }
 
@@ -184,22 +148,19 @@ public sealed partial class AddProductPage : Page
 
             if (result.ToList().Count != 0)
             {
-                _showInfoDialog("Success", "Add product successfully");
-                foreach (var data in result)
-                {
-                    Console.WriteLine(data.Name);
-                }
+                await App.MainWindow.ShowMessageDialogAsync("Add product successfully", "Success");
             }
             else
             {
-                _showInfoDialog("Fail", "Add product unsuccessfully");
+                await App.MainWindow.ShowMessageDialogAsync("Add product unsuccessfully", "Fail");
             }
-        } catch (Exception ex)
+        } 
+        catch (Exception ex)
         {
             ViewModel.IsLoading = false;
-            _showInfoDialog("Error", ex.Message);
+            await App.MainWindow.ShowMessageDialogAsync(ex.Message, "Unexpected Error!");
             ViewModel.Item.Image = image;
-            App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
         }
     }
 

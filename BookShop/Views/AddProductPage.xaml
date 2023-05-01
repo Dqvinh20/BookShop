@@ -1,4 +1,4 @@
-<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+﻿<!-- Copyright (c) Microsoft Corporation and Contributors. -->
 <!-- Licensed under the MIT License. -->
 
 <Page
@@ -10,7 +10,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers ="using:BookShop.Helpers"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    xmlns:media="using:CommunityToolkit.WinUI.UI.Media"
     mc:Ignorable="d"
     >
     <Page.Resources>
@@ -23,187 +22,225 @@
                 <VisualState>
                     <VisualState.StateTriggers>
                         <!--641 is the default CompactModeThresholdWidth in NavigationView--> 
-                        <AdaptiveTrigger MinWindowWidth="300" />
+                        <AdaptiveTrigger MinWindowWidth="741" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="itemHero.(RelativePanel.AlignTopWithPanel)" Value="True" />
-                        <Setter Target="itemHero.(RelativePanel.AlignLeftWithPanel)" Value="True" />
-                        <Setter Target="itemHero.(RelativePanel.AlignRightWithPanel)" Value="True" />
-                        
-                        <Setter Target="productForm.(RelativePanel.Below)" Value="itemHero" />
-                        <Setter Target="productForm.(RelativePanel.AlignTopWithPanel)" Value="False" />
+                        <Setter Target="itemImage.(RelativePanel.AlignTopWithPanel)" Value="True"/>
+                        <Setter Target="itemImage.(RelativePanel.AlignLeftWithPanel)" Value="True"/>
+
+                        <Setter Target="productForm.(RelativePanel.RightOf)" Value="itemImage" />
+                        <Setter Target="productForm.(RelativePanel.AlignRightWithPanel)" Value="True" />
+                        <Setter Target="productForm.(RelativePanel.AlignTopWithPanel)" Value="True" />
+
+                        <Setter Target="bookDescription.(RelativePanel.Below)" Value="productForm" />
+                        <Setter Target="bookDescription.(RelativePanel.AlignLeftWithPanel)" Value="True" />
+                        <Setter Target="bookDescription.(RelativePanel.AlignRightWithPanel)" Value="True" />
+
+                        <Setter Target="addButton.(RelativePanel.Below)" Value="bookDescription" />
+                        <Setter Target="addButton.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="True" />
+                        <Setter Target="addButton.(RelativePanel.AlignBottomWithPanel)" Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!--641 is the default CompactModeThresholdWidth in NavigationView-->
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="itemImage.(RelativePanel.AlignTopWithPanel)" Value="True"/>
+                        <Setter Target="itemImage.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="True"/>
+
+                        <Setter Target="productForm.(RelativePanel.Below)" Value="itemImage" />
                         <Setter Target="productForm.(RelativePanel.AlignLeftWithPanel)" Value="True" />
                         <Setter Target="productForm.(RelativePanel.AlignRightWithPanel)" Value="True" />
+                        
+                        <Setter Target="bookDescription.(RelativePanel.Below)" Value="productForm" />
+                        <Setter Target="bookDescription.(RelativePanel.AlignLeftWithPanel)" Value="True" />
+                        <Setter Target="bookDescription.(RelativePanel.AlignRightWithPanel)" Value="True" />
+
+                        <Setter Target="addButton.(RelativePanel.Below)" Value="bookDescription" />
+                        <Setter Target="addButton.(RelativePanel.AlignHorizontalCenterWithPanel)" Value="True" />
+                        <Setter Target="addButton.(RelativePanel.AlignBottomWithPanel)" Value="True" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
+            
         </VisualStateManager.VisualStateGroups>
         <ScrollViewer
             IsTabStop="True"
             VerticalScrollBarVisibility="Auto"
             Padding="0,0,12,0"
             >
-            <StackPanel Orientation="Vertical">
-                <RelativePanel>
-                    <Grid 
-                        Padding="12"
-                        x:Name="itemHero"
+            <RelativePanel>
+                <Grid 
+                    Padding="12"
+                    x:Name="itemImage"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Width="300"
+                >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Image 
+                        x:Name="ImagePreview"
+                        Grid.Row="0"
+                        Stretch="Fill"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Width="300"
-                        RelativePanel.AlignTopWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                    >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Image 
-                            x:Name="ImagePreview"
-                            Grid.Row="0"
-                            Stretch="Fill"
-                            HorizontalAlignment="Center"
-                            Width="250"
-                            Height="300"
-                            Source="{x:Bind ViewModel.ImagePreview, Mode=OneWay}"
+                        Width="250"
+                        Height="300"
+                        Source="{x:Bind ViewModel.ImagePreview, Mode=OneWay}"
+                    />
+                    <Button 
+                        Margin = "0, 12, 0, 0"
+                        Content="Choose Image *"
+                        Grid.Row="1"
+                        HorizontalAlignment="Center" 
+                        Click="OnSelectImageClick"
                         />
-                        <Button 
-                            Margin = "0, 12, 0, 0"
-                            Content="Choose Image *"
+                </Grid>
+                <Grid 
+                    x:Name="productForm"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBox
+                            TextWrapping="Wrap"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Header="Book Name *"
+                            Text="{x:Bind ViewModel.Item.Name, Mode=TwoWay}"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            />
+                    <TextBox
+                            Margin="{StaticResource SmallBottomMargin}"
+                            TextWrapping="Wrap"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Grid.Column="0"
+                            Header="Author *"
+                            Text="{x:Bind ViewModel.Item.Author, Mode=TwoWay}"
+                        />
+
+                    <TextBox
+                            Margin="{StaticResource SmallRightBottomMargin}"
+                            TextWrapping="Wrap"
                             Grid.Row="2"
-                            HorizontalAlignment="Center" 
-                            Click="OnSelectImageClick"
-                            />
-                    </Grid>
-                    <Grid 
-                        x:Name="productForm"
-                        RelativePanel.RightOf="itemHero"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True"
-                        RelativePanel.AlignBottomWithPanel="True"
-                        >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBox
-                                TextWrapping="Wrap"
-                                Grid.Row="0"
-                                Grid.ColumnSpan="2"
-                                Header="Book Name *"
-                                Text="{x:Bind ViewModel.Item.Name, Mode=TwoWay}"
-                                Margin="{StaticResource SmallBottomMargin}"
-                                />
-                        <TextBox
-                                Margin="{StaticResource SmallBottomMargin}"
-                                TextWrapping="Wrap"
-                                Grid.Row="1"
-                                Grid.ColumnSpan="2"
-                                Grid.Column="0"
-                                Header="Author *"
-                                Text="{x:Bind ViewModel.Item.Author, Mode=TwoWay}"
-                            />
+                            Grid.Column="0"
+                            Header="Publisher *"
+                            Text="{x:Bind ViewModel.Item.Publisher, Mode=TwoWay}"
+                        />
 
-                        <TextBox
-                                Margin="{StaticResource SmallRightBottomMargin}"
-                                TextWrapping="Wrap"
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Header="Publisher *"
-                                Text="{x:Bind ViewModel.Item.Publisher, Mode=TwoWay}"
-                            />
+                    <NumberBox
+                        
+                            Margin="{StaticResource SmallBottomMargin}"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Header="Published Year *"
+                            PlaceholderText="yyyy"
+                            ValidationMode="InvalidInputOverwritten"
+                            Maximum="{x:Bind  ViewModel.Item.PublishedYear, Converter={StaticResource NumberBoxValueConverter}, Mode=OneTime}"
+                            Value="{x:Bind  ViewModel.Item.PublishedYear, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
+                        />
 
-                        <NumberBox
-                                Margin="{StaticResource SmallBottomMargin}"
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Header="Published Year *"
-                                Value="{x:Bind  ViewModel.Item.PublishedYear, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
-                            />
+                    <NumberBox
+                            x:Name="orgPriceNumberBox"
+                            Margin="{StaticResource SmallRightBottomMargin}"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Header="Import Price *"
+                            Minimum ="0"
+                            PlaceholderText="đ0"
+                            ValidationMode="InvalidInputOverwritten"
+                            Value="{x:Bind ViewModel.Item.OriginalPrice, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
+                        />
 
-                        <NumberBox
-                                Margin="{StaticResource SmallRightBottomMargin}"
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Header="Original Price *"
-                                Minimum ="0"
-                                Value="{x:Bind ViewModel.Item.OriginalPrice, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
-                            />
+                    <NumberBox
+                            x:Name="priceNumberBox"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Header="Price *"
+                            Minimum ="0"
+                            PlaceholderText="đ0"
+                            ValidationMode="InvalidInputOverwritten"
+                            Value="{x:Bind ViewModel.Item.Price, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
+                        />
 
-                        <NumberBox
-                                Margin="{StaticResource SmallBottomMargin}"
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Header="Price *"
-                                Minimum ="0"
-                                Value="{x:Bind ViewModel.Item.Price, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
-                            />
-
-                        <NumberBox
-                                Margin="{StaticResource SmallRightBottomMargin}"
-                                Grid.Row="4"
-                                Grid.Column="0"
-                                Header="Original Quantity *"
-                                Minimum ="0"
+                    <NumberBox
+                            Margin="{StaticResource SmallRightBottomMargin}"
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Header="Import Quantity *"
+                            Minimum ="0"
+                            PlaceholderText="0"
+                            ValidationMode="InvalidInputOverwritten"
                             Value="{x:Bind ViewModel.Item.OriginalQuantity, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
-                            />
+                        />
 
-                        <NumberBox
-                                Margin="{StaticResource SmallBottomMargin}"
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Minimum="0"
-                                Maximum="100"
-                                Header="Discount"
-                                Value="{x:Bind ViewModel.Item.Discount, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
-                            />
-                        <AutoSuggestBox 
-                                Margin="{StaticResource SmallBottomMargin}"
-                                Header="Category *"
-                                Grid.Row="6"
-                                Grid.ColumnSpan="2"
-                                Grid.Column="0"
-                                AutomationProperties.Name="AutoSuggestBox Category"
-                                TextChanged="AutoSuggestBox_TextChanged"
-                                SuggestionChosen="AutoSuggestBox_SuggestionChosen"
-                                QuerySubmitted="AutoSuggestBox_QuerySubmitted"
-                            >
+                    <NumberBox
+                            x:Name="discountNumberBox"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Minimum="0"
+                            Maximum="100"
+                            Header="Discount"
+                            PlaceholderText="0%"
+                            ValidationMode="InvalidInputOverwritten"
+                            Value="{x:Bind ViewModel.Item.Discount, Converter={StaticResource NumberBoxValueConverter}, Mode=TwoWay}"
+                        />
+                        
+                    <AutoSuggestBox 
+                            Margin="{StaticResource SmallBottomMargin}"
+                            Header="Category *"
+                            Grid.Row="6"
+                            Grid.ColumnSpan="2"
+                            Grid.Column="0"
+                            AutomationProperties.Name="AutoSuggestBox Category"
+                            TextChanged="AutoSuggestBox_TextChanged"
+                            SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                            QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+                        >
                             
-                        </AutoSuggestBox>
-                    </Grid>
-                </RelativePanel>
-                <TextBox
-                        Margin="{StaticResource SmallBottomMargin}"
-                        TextWrapping="Wrap"
-                        Header="Book Description"
-                        MinHeight="200"
-                />
-                <Button Content="Add" HorizontalAlignment="Center" Margin="{StaticResource SmallBottomMargin}" Click="OnAddProductClick"/>
-            </StackPanel>
-        </ScrollViewer>
+                    </AutoSuggestBox>
+                </Grid>
 
+                <TextBox
+                    x:Name="bookDescription"
+                    Margin="{StaticResource SmallBottomMargin}"
+                    TextWrapping="Wrap"
+                    Header="Book Description"
+                    MinHeight="200"
+                    
+                />
+                <Button 
+                    x:Name="addButton"
+                    Content="Add"
+                    HorizontalAlignment="Center"
+                    Margin="{StaticResource SmallBottomMargin}"
+                    Click="OnAddProductClick"
+                    />
+            </RelativePanel>
+           
+        </ScrollViewer>
         <controls:Loading 
             x:Name="LoadingControl"
             IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+            Style="{StaticResource DefaultLoading}"
             >
-            <controls:Loading.Background>
-                <media:AcrylicBrush  
-                    BlurAmount="8"
-                    TintOpacity="0.4" TintColor="Black"  />
-            </controls:Loading.Background>
-            <StackPanel Orientation="Horizontal" Padding="12">
-                <ProgressRing x:Name="progressRing" IsActive="True" Margin="0,0,12,0" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
-                <TextBlock Text="Please wait a moment" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-            </StackPanel>
         </controls:Loading>
     </Grid>
 </Page>

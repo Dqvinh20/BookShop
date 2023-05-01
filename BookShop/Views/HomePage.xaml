@@ -9,11 +9,14 @@
     xmlns:models="using:BookShop.Core.Models"
     xmlns:custom="using:BookShop.Custom"
     xmlns:helpers="using:BookShop.Helpers"
-    xmlns:media="using:CommunityToolkit.WinUI.UI.Media"
     mc:Ignorable="d">
 
     <Page.Resources>
         <helpers:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
+        <helpers:NumberToCurrencyConverter x:Key="NumberToCurrencyConverter" />
+        <helpers:DiscountToTextConverter x:Key="DiscountToTextConverter" />
+        <helpers:DiscountVisibilityConverter x:Key="DiscountVisibilityConverter" />
+
         <Style x:Key="CustomExpanderHeaderStyle" TargetType="ToggleButton">
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
@@ -29,6 +32,45 @@
                     TextTrimming="CharacterEllipsis"
                     TextWrapping="NoWrap" 
                 />
+        </DataTemplate>
+
+        <DataTemplate x:Key="ProductTemplate" x:DataType="models:Product">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Padding="12">
+                <Image Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
+                <TextBlock
+                    Margin="12,12,12,0"
+                    HorizontalAlignment="Left"
+                    TextWrapping="Wrap"
+                    MaxLines="2"
+                    LineStackingStrategy="BlockLineHeight"
+                    TextTrimming="WordEllipsis" 
+                    Style="{ThemeResource ProductTitleTextStyle}"
+                    Text="{x:Bind Name}" />
+                <StackPanel 
+                    Margin="{StaticResource SmallMargin}"
+                    Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+                    <TextBlock
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Center"
+                        TextWrapping="NoWrap"
+                        Style="{ThemeResource PriceTextStyle}"
+                        x:DefaultBindMode="OneWay"
+                        Text="{x:Bind DiscountPrice, Converter={StaticResource NumberToCurrencyConverter}}"
+                    />
+
+                    <TextBlock
+                        VerticalAlignment="Top"
+                        Margin="4,0,0,0"
+                        HorizontalAlignment="Center"
+                        TextWrapping="NoWrap"
+                        Style="{ThemeResource DiscountTextStyle}"
+                        x:DefaultBindMode="OneWay"
+                        Text="{x:Bind Discount, Converter={StaticResource DiscountToTextConverter}}"
+                        Visibility="{x:Bind Discount, Converter={StaticResource DiscountVisibilityConverter}}"
+                    />
+                </StackPanel>
+            </StackPanel>
         </DataTemplate>
     </Page.Resources>
 
@@ -129,38 +171,14 @@
                     animations:Connected.ListItemKey="animationKeyContentGrid"
                     animations:ItemsReorderAnimation.Duration="00:00:00.4000000"
                     DesiredWidth="300"
+                    ItemHeight="320"
                     IsItemClickEnabled="True"
                     ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
                     ItemsSource="{x:Bind ViewModel.FilteredItems, Mode=OneWay}"
                     SelectionMode="Single"
                     StretchContentForSingleRow="False"
-                    >
-                <controls:AdaptiveGridView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Product">
-                        <Grid
-                        x:Name="itemThumbnail"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                        >
-                            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Padding="12">
-                                <Image Source="{x:Bind Image}" Stretch="Fill" Height="200"/>
-                                <TextBlock
-                                        HorizontalAlignment="Center"
-                                        TextWrapping="Wrap"
-                                        MaxLines="3"
-                                        Style="{ThemeResource SubtitleTextBlockStyle}"
-                                        Text="{x:Bind Name}" />
-
-                                <TextBlock
-                                    
-                                        HorizontalAlignment="Center"
-                                        TextWrapping="NoWrap"
-                                        Style="{ThemeResource BodyTextStyle}"
-                                        Text="{x:Bind Price}" />
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </controls:AdaptiveGridView.ItemTemplate>
-            </controls:AdaptiveGridView>
+                    ItemTemplate="{StaticResource ProductTemplate}"
+                    />
         </RelativePanel>
 
         <Grid  
@@ -187,18 +205,11 @@
                 CurrentPage="{x:Bind ViewModel.CurrentPage, Mode=TwoWay}"
              />
         </Grid>
-        
-        <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}">
-            <controls:Loading.Background>
-                <media:AcrylicBrush  
-                    BlurAmount="8"
-                    TintOpacity="0.4" TintColor="Black"  />
-            </controls:Loading.Background>
-            <StackPanel Orientation="Horizontal" Padding="12">
-                <ProgressRing IsActive="True" Margin="0,0,12,0" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
-                <TextBlock Text="Please wait a moment" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-            </StackPanel>
-        </controls:Loading>
-        
+
+        <controls:Loading 
+            x:Name="LoadingControl"
+            IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+            Style="{StaticResource DefaultLoading}"
+            />
     </Grid>
 </Page>
