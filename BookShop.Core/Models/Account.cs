@@ -14,16 +14,11 @@ public class Account
     public int? Id { get; set; }
 
     [JsonProperty("username")]
-        
     public string Username { get; set; }
 
+
     [JsonProperty("password")]
-
     public string Password { get; set; }
-
-    [JsonProperty("entropy")]
-
-    public string Entropy { get; set; }
 
     [JsonProperty("created_at")]
     public DateTime? CreatedAt { get; set; }

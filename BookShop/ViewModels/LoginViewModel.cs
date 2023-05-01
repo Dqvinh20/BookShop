@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using BookShop.Contracts.Services;
 using BookShop.Core.Models;
+using BookShop.Helpers;
 using BookShop.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -76,13 +77,12 @@ public class LoginViewModel : ObservableObject
         }
         else
         {
-            string decryptPassword = _decryptPassword(account.Password, account.Entropy);
-            if (Account.Password.Trim() == decryptPassword)
+            bool isVerify = SecurePasswordHelper.Verify(Account.Password.Trim(), account.Password);
+            if (isVerify)
             {
                 if (IsStayLogged)
                 {
                     Account.Password = account.Password;
-                    Account.Entropy = account.Entropy;
                 }
                 else
                 {
@@ -115,47 +115,5 @@ public class LoginViewModel : ObservableObject
         {
             App.MainWindow.Content = App.GetService<ShellPage>();
         }
-    }
-
-    private string _decryptPassword(string passwordIn64, string entropyIn64)
-    {
-        try
-        {
-            if (passwordIn64.Length != 0)
-            {
-                byte[] entropyInBytes = Convert.FromBase64String(entropyIn64);
-                byte[] cypherTextInBytes = Convert.FromBase64String(passwordIn64);
-
-                byte[] passwordInBytes = ProtectedData.Unprotect(
-                    cypherTextInBytes,
-                    entropyInBytes,
-                    DataProtectionScope.CurrentUser
-                );
-
-                string password = Encoding.UTF8.GetString(passwordInBytes);
-                return password;
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.StackTrace);
-        }
-        return string.Empty;
-    }
-
-    private string _encryptPassword(string password, string entropyIn64)
-    {
-        var passwordInBytes = Encoding.UTF8.GetBytes(password);
-        byte[] entropyInBytes = Convert.FromBase64String(entropyIn64);
-
-        var cypherText = ProtectedData.Protect(
-            passwordInBytes,
-            entropyInBytes,
-            DataProtectionScope.CurrentUser
-        );
-
-        var passwordIn64 = Convert.ToBase64String(cypherText);
-
-        return passwordIn64;
     }
 }
