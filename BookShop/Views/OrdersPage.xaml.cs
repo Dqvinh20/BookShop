@@ -16,4 +16,19 @@ public sealed partial class OrdersPage : Page
         ViewModel = App.GetService<OrdersViewModel>();
         InitializeComponent();
     }
+
+    private void clearCurrentOrderButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+
+    }
+
+    private void createOrderWithCurrentButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+
+    }
+
+    private void deleteCakeButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+
+    }
 }
