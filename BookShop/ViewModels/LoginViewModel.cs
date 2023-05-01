@@ -85,6 +85,14 @@ public class LoginViewModel : ObservableObject
                     Account.Entropy = account.Entropy;
                     SaveCredential();
                 }
+                else
+                {
+                    var config = ConfigurationManager.OpenExeConfiguration(
+                        ConfigurationUserLevel.None);
+                    config.AppSettings.Settings["IsStayLogged"].Value = IsStayLogged.ToString();
+                    config.Save(ConfigurationSaveMode.Full);
+                    ConfigurationManager.RefreshSection("appSettings");
+                }
                 return true;
             }
             else
