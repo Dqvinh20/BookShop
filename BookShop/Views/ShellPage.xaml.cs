@@ -1,4 +1,5 @@
-﻿using System.Windows.Interop;
+﻿using System.Configuration;
+using System.Windows.Interop;
 using System.Windows.Navigation;
 using BookShop.Contracts.Services;
 using BookShop.Helpers;
@@ -108,6 +109,12 @@ public sealed partial class ShellPage : Page
 
     private void OnSignOutClick(object sender, TappedRoutedEventArgs e)
     {
+        var config = ConfigurationManager.OpenExeConfiguration(
+                       ConfigurationUserLevel.None);
+        config.AppSettings.Settings["Password"].Value = "";
+        config.Save(ConfigurationSaveMode.Full);
+        ConfigurationManager.RefreshSection("appSettings");
+
         App.MainWindow.Content = App.GetService<LoginPage>();
     }
 }
