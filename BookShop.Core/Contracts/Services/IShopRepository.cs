@@ -30,6 +30,14 @@ public interface IShopRepository
     }
 
     /// <summary>
+    /// Returns the invoice repository.
+    /// </summary>
+    IInvoiceRepository Invoice
+    {
+        get;
+    }
+
+    /// <summary>
     /// Returns the storage repository.
     /// </summary>
     IStorageRepository Storage
