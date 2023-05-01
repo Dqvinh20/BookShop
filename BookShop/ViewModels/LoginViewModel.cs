@@ -69,7 +69,7 @@ public class LoginViewModel : ObservableObject
 
     public async Task<bool> CheckAuthenticated()
     {
-        var account = (await App.Repository.Accounts.GetAccountByUsernameAsync(Account.Username)).FirstOrDefault();
+        var account = (await App.Repository.Accounts.GetAccountByUsernameAsync(Account.Username.Trim())).FirstOrDefault();
         if (account == null)
         {
             await App.MainWindow.ShowMessageDialogAsync("Username or password incorrect!", "Login Fail !");
@@ -77,7 +77,7 @@ public class LoginViewModel : ObservableObject
         else
         {
             string decryptPassword = _decryptPassword(account.Password, account.Entropy);
-            if (Account.Password == decryptPassword)
+            if (Account.Password.Trim() == decryptPassword)
             {
                 if (IsStayLogged)
                 {
