@@ -57,6 +57,7 @@ public class NavigationViewService : INavigationViewService
 
     private void OnItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
     {
+        Console.WriteLine(args.InvokedItem);
         if (args.IsSettingsInvoked)
         {
             _navigationService.NavigateTo(typeof(SettingsViewModel).FullName!);

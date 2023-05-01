@@ -10,6 +10,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
 using BookShop.Contracts.Services;
+using BookShop.Services;
+using BookShop.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -30,53 +32,18 @@ namespace BookShop.Views;
 /// </summary>
 public sealed partial class SplashPage : Page
 {
-    public SplashPage()
+    public SplashViewModel ViewModel
     {
+        get;
+    }
+    public SplashPage(SplashViewModel viewModel)
+    {
+        ViewModel = viewModel;
         this.InitializeComponent();
     }
 
-    public SplashPage(ILocalSettingsService s)
+    public async void OnLoaded(object sender, RoutedEventArgs e)
     {
-        this.InitializeComponent();
-    }
-
-    public void OnLoaded(object sender, RoutedEventArgs e)
-    {
-        _checkLogin();
-    }
-
-    private async void _checkLogin()
-    {
-        //string username = ConfigurationManager.AppSettings["Username"]!;
-        //string passwordIn64 = ConfigurationManager.AppSettings["Password"]!;
-        //string entropyIn64 = ConfigurationManager.AppSettings["Entropy"]!;
-        //string isStayLoggedIn = ConfigurationManager.AppSettings["IsStayLogged"]!;
-
-        //if (isStayLoggedIn == "true")
-        //{
-        //    byte[] entropyInBytes = Convert.FromBase64String(entropyIn64);
-        //    byte[] cypherTextInBytes = Convert.FromBase64String(passwordIn64);
-
-        //    byte[] passwordInBytes = ProtectedData.Unprotect(cypherTextInBytes,
-        //        entropyInBytes,
-        //        DataProtectionScope.CurrentUser
-        //    );
-
-        //    string password = Encoding.UTF8.GetString(passwordInBytes);
-        //    _login(username, password);
-        //}
-    }
-
-    private async void _login(String username,String password)
-    {
-        bool isSuccess = true;
-        if(isSuccess)
-        {
-            App.MainWindow.Content = App.GetService<ShellPage>();
-        }
-        else
-        {
-            App.MainWindow.Content = App.GetService<LoginPage>();
-        }
+        await ViewModel.CheckCredential();
     }
 }

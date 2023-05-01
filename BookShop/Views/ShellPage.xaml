@@ -7,9 +7,13 @@
     xmlns:helpers="using:BookShop.Helpers"
     xmlns:behaviors="using:BookShop.Behaviors"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
-    Loaded="OnLoaded">
+    Loaded="OnLoaded"
+    >
+    <Page.Resources>
+        <Thickness x:Key="NavigationViewHeaderMargin">32, 12, 32, 12</Thickness>
+    </Page.Resources>
 
-    <Grid>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid x:Name="AppTitleBar"
               Canvas.ZIndex="1"
               Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
@@ -73,8 +77,17 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE9D9;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                
             </NavigationView.MenuItems>
+            <NavigationView.PaneFooter>
+                <StackPanel Orientation="Vertical">
+                    <NavigationViewItem Content="Sign out" Tapped="OnSignOutClick" >
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xF3B1;"/>
+                        </NavigationViewItem.Icon>
+                       
+                    </NavigationViewItem>
+                </StackPanel>
+            </NavigationView.PaneFooter>
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -98,7 +111,7 @@
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
-            <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
+            <Grid Margin="32, 0, 32, 8">
                 <Frame x:Name="NavigationFrame" />
             </Grid>
         </NavigationView>

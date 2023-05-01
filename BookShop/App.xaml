@@ -9,7 +9,10 @@
                 <ResourceDictionary Source="/Styles/FontSizes.xaml" />
                 <ResourceDictionary Source="/Styles/Thickness.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
+                <ResourceDictionary Source="/Styles/Loading.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <StaticResource x:Key="WindowCaptionForeground" ResourceKey="ApplicationForegroundThemeBrush" />
+            <StaticResource x:Key="WindowCaptionForegroundDisabled" ResourceKey="AppBarItemDisabledForegroundThemeBrush" />
             <SolidColorBrush x:Key="WindowCaptionBackground">Transparent</SolidColorBrush>
             <SolidColorBrush x:Key="WindowCaptionBackgroundDisabled">Transparent</SolidColorBrush>
         </ResourceDictionary>

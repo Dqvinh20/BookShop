@@ -7,47 +7,36 @@ using Newtonsoft.Json;
 
 namespace BookShop.Core.Models;
 
-[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]  
+
 public class Invoice
 {
     [JsonProperty("id")]
     public int? Id
     {
-        get; set;
-    }
+    get; set; }
 
     [JsonProperty("customer_id")]
     public int? CustomerId
     {
         get; set;
-    }
-
-    [JsonProperty("shipping_cost")]
-    public int? ShippingCost
-    {
-        get; set;
-    } = 0;
+    } = null;
 
     [JsonProperty("total_money")]
-    public int? TotalMoney
+    public int TotalMoney
     {
         get; set;
     } = 0;
 
-    [JsonProperty("created_at")]
-    public DateTime? CreatedAt
+    [JsonProperty("created_at")] 
+    public DateTime? CreatedAt { get; set; } = null;
+
+    [JsonProperty("customers")]
+    public Customer? Customer
     {
         get; set;
-    }
+    } = null;
 
-    [JsonProperty("updated_at")]
-    public DateTime? UpdatedAt
-    {
-        get; set;
-    }
-
-    public override string ToString()
-    {
-        return $"Category(Id = {Id}, CustomerId = {CustomerId}, ShippingCost = {ShippingCost}, TotalMoney = {TotalMoney}, CreateAt = {CreatedAt ?? null}, UpdatedAt = {UpdatedAt ?? null})";
-    }
+    [JsonProperty("invoice_detail")]
+    public IEnumerable<InvoiceDetail>? InvoiceDetails { get; set; } = null;
 }

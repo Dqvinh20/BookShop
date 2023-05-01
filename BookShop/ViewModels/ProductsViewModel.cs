@@ -270,7 +270,6 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
             SelectBook(sender.Text);
         }
     }
-
     public void BookSearch_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
     {
         // Don't autocomplete the TextBox when we are showing "no results"

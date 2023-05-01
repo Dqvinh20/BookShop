@@ -16,7 +16,7 @@ public class Product
     get; set; }
 
     [JsonProperty("discount")]
-    public int Discount
+    public double Discount
     {
         get; set;
     } = 0;
@@ -68,6 +68,13 @@ public class Product
     {
         get; set;
     } = 0;
+
+    [JsonProperty("discount_price")]
+    public int DiscountPrice
+    {
+        get; set;
+    } = 0;
+
     [JsonProperty("org_price")]
     public int OriginalPrice
     {

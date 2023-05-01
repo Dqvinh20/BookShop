@@ -8,6 +8,13 @@ namespace BookShop.Core.Contracts.Services;
 public interface IShopRepository
 {
     /// <summary>
+    /// Returns the accounts repository.
+    /// </summary>
+    IAccountRepository Accounts
+    {
+        get;
+    }
+    /// <summary>
     /// Returns the categories repository.
     /// </summary>
     ICategoriesRepository Categories
@@ -18,6 +25,14 @@ public interface IShopRepository
     /// Returns the products repository.
     /// </summary>
     IProductsRepository Products
+    {
+        get;
+    }
+
+    /// <summary>
+    /// Returns the invoice repository.
+    /// </summary>
+    IInvoiceRepository Invoice
     {
         get;
     }

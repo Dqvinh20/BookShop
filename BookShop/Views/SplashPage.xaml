@@ -12,7 +12,7 @@
     Loaded="OnLoaded"
     >
 
-    <Grid Background="White">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Ellipse 
             HorizontalAlignment="Center"
             VerticalAlignment="Center" 
