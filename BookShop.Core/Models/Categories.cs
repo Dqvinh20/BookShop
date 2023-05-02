@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,5 +26,12 @@ public class Categories
     public override string ToString()
     {
         return $"Category(Id = {Id}, Name = {Name}, CreateAt = {CreatedAt ?? null}, UpdatedAt = {UpdatedAt ?? null})";
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        return (obj as Categories).Id == this.Id;
     }
 }

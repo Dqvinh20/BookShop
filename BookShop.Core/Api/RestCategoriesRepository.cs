@@ -17,9 +17,7 @@ public class RestCategoriesRepository : ICategoriesRepository
     public async Task DeleteCategoryAsync(int id) => await _http.DeleteAsync($"{_controller}?id=eq.{id}", _accessToken);
     public async Task<IEnumerable<Categories>> GetAllCategoriesAsync()
     {
-        List<Categories> result = new List<Categories>(await _http.GetAsync<IEnumerable<Categories>>(_controller, _accessToken));
-        result.RemoveAt(0);
-        result.Sort((x, y) => string.Compare(x.Name, y.Name));
+        List<Categories> result = new List<Categories>(await _http.GetAsync<IEnumerable<Categories>>($"{_controller}?order=name", _accessToken));
         return result;
     }
     public async Task<IEnumerable<Categories>> GetCategoriesWithQueryAsync(string query) => await _http.GetAsync<IEnumerable<Categories>>($"{_controller}?{query}", _accessToken);

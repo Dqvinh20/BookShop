@@ -47,12 +47,12 @@ public sealed partial class HomePage : Page
         TokenBoxCategories.TokenItemAdding += TokenItemCreating;
         TokenBoxCategories.SuggestedItemsSource = _acv;
 
-        MinPriceNumberBox.NumberFormatter = new CurrencyFormatter(CurrencyIdentifiers.VND)
+        MinPriceNumberBox.NumberFormatter = new DecimalFormatter()
         {
             IntegerDigits = 1,
             FractionDigits = 0,
         };
-        MaxPriceNumberBox.NumberFormatter = new CurrencyFormatter(CurrencyIdentifiers.VND)
+        MaxPriceNumberBox.NumberFormatter = new DecimalFormatter()
         {
             IntegerDigits = 1,
             FractionDigits = 0,
@@ -113,7 +113,7 @@ public sealed partial class HomePage : Page
                     }) != null;
 
                     // Filter by price
-                    var isBetweenPrice = product.Price >= ViewModel.MinPrice && product.Price <= ViewModel.MaxPrice;
+                    var isBetweenPrice = product.DiscountPrice >= ViewModel.MinPrice && product.DiscountPrice <= ViewModel.MaxPrice;
                     
                     // Check if user apply for two condition
                     if (filterByCategory && filterByPrice)

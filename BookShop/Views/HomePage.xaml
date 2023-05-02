@@ -36,7 +36,7 @@
 
         <DataTemplate x:Key="ProductTemplate" x:DataType="models:Product">
             <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Padding="12">
-                <Image Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
+                <Image x:Name="itemImage" Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
                 <TextBlock
                     Margin="12,12,12,0"
                     HorizontalAlignment="Left"
@@ -167,7 +167,7 @@
                     RelativePanel.Below="topAppBar"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignRightWithPanel="True"
-                    animations:Connected.ListItemElementName="itemThumbnail"
+                    animations:Connected.ListItemElementName="itemImage"
                     animations:Connected.ListItemKey="animationKeyContentGrid"
                     animations:ItemsReorderAnimation.Duration="00:00:00.4000000"
                     DesiredWidth="300"
