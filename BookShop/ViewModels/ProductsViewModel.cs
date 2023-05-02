@@ -139,10 +139,20 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
         ItemClickCommand = new RelayCommand<Product>(OnItemClick);
     }
 
-    public void Refesh()
+    public async Task Refesh(bool isFetchNewData = false)
     {
+        Debug.WriteLine("Before");
+        if (isFetchNewData)
+        {
+            Debug.WriteLine("While");
+
+            OriginItem = new ObservableCollection<Product>(await App.Repository.Products.GetAllProductsAsync());
+        }
+        Debug.WriteLine("After");
+
         _updateDataSource(_currentPage);
         _updatePagingInfo();
+
     }
 
     public async void OnNavigatedTo(object parameter)
@@ -281,6 +291,6 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
     #endregion
     public void OnAddProductClick()
     {
-        _navigationService.NavigateTo(typeof(AddProductViewModel).FullName!, OriginItem.ToList<Product>());
+        _navigationService.NavigateTo(typeof(UpsertProductViewModel).FullName!, OriginItem.ToList<Product>());
     }
 }

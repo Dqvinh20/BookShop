@@ -15,7 +15,7 @@ public class RestProductsRespository : IProductsRepository
     }
 
     public async Task DeleteProductAsync(int id) => await _http.DeleteAsync($"{_controller}?id=eq.{id}", _accessToken);
-    public async Task<IEnumerable<Product>> GetAllProductsAsync() => await _http.GetAsync<IEnumerable<Product>>($"{_controller}?select=*,categories(*)", _accessToken, null);
+    public async Task<IEnumerable<Product>> GetAllProductsAsync() => await _http.GetAsync<IEnumerable<Product>>($"{_controller}?select=*,categories(*)&order=name", _accessToken, null);
     public async Task<Product> GetProductByIdAsync(int id)
     {
         var data = await _http.GetAsync<IEnumerable<Product>>($"{_controller}?select=*,categories(*),id=eq.{id}", _accessToken, null);
@@ -24,10 +24,12 @@ public class RestProductsRespository : IProductsRepository
 
     public async Task<IEnumerable<Product>> UpsertProductAsync(Product product)
     {
-        List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
-        headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
-        headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
-        return await _http.PostAsync<Product, IEnumerable<Product>>(_controller, product, _accessToken, headers);
+        Console.WriteLine(product);
+        return await UpsertProductAsync(new List<Product>() { product });
+        //List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+        //headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
+        //headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
+        //return await _http.PostAsync<Product, IEnumerable<Product>>(_controller, product, _accessToken, headers);
     }
 
     public async Task<IEnumerable<Product>> UpsertProductAsync(List<Product> products)

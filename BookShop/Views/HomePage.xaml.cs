@@ -161,9 +161,9 @@ public sealed partial class HomePage : Page
             {
                 ViewModel.IsLoading = true;
                 await _readExcelFile(file.Path);
+                await ViewModel.Refesh(true);
                 ViewModel.IsLoading = false;
                 await ShowDialog("Success", "All product import successfully!");
-                ViewModel.Refesh();
             }
         }
     }

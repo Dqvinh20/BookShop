@@ -19,8 +19,8 @@
     <None Remove="Custom\PaginationControl.xaml" />
     <None Remove="Custom\ProductCountControl.xaml" />
     <None Remove="Styles\Loading.xaml" />
-    <None Remove="Views\AddProductPage.xaml" />
     <None Remove="Views\PaginationControl.xaml" />
+    <None Remove="Views\UpsertProductPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Views\SplashPage.xaml" />
@@ -64,7 +64,7 @@
     <Page Update="Custom\ProductCountControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Views\AddProductPage.xaml">
+    <Page Update="Views\UpsertProductPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Custom\PaginationControl.xaml">

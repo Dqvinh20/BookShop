@@ -9,7 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Controls;
 
 namespace BookShop.ViewModels;
-public class AddProductViewModel : ObservableRecipient, INavigationAware
+public class UpsertProductViewModel : ObservableRecipient, INavigationAware
 {
     private Product? _item;
     private List<Product> _products;
@@ -20,6 +20,8 @@ public class AddProductViewModel : ObservableRecipient, INavigationAware
         get => _item;
         set => SetProperty(ref _item, value);
     }
+
+    public int CurrentYear => DateTime.Now.Year;
 
     public bool IsLoading
     {
@@ -32,7 +34,6 @@ public class AddProductViewModel : ObservableRecipient, INavigationAware
         get => _imagePreview ?? "x";
         set
         {
-            Item.Image = value;
             SetProperty(ref _imagePreview, value);
         }
     }
@@ -45,9 +46,16 @@ public class AddProductViewModel : ObservableRecipient, INavigationAware
         if (parameter is List<Product> products)
         {
             _products = products.ToList();
+            
         }
-
+        else if(parameter is Product item)
+        {
+            Console.WriteLine(item.Category.ToString());
+            Item = item;
+            return;
+        }
         Item = new Product();
+
     }
 
     public bool ValidateField(ref string message)
@@ -63,8 +71,8 @@ public class AddProductViewModel : ObservableRecipient, INavigationAware
             message = "Must fill all required fields";
             return false;
         }
-
-        if (_products.Find(product => product.IsSameProduct(_item)) != null)
+        
+        if (_products != null && _products.Find(product => product.IsSameProduct(_item)) != null)
         {
             message = "Product is already existed";
             return false;

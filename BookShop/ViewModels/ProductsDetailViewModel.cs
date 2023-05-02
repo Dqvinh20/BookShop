@@ -1,4 +1,5 @@
-﻿using BookShop.Contracts.ViewModels;
+﻿using BookShop.Contracts.Services;
+using BookShop.Contracts.ViewModels;
 using BookShop.Core.Contracts.Services;
 using BookShop.Core.Models;
 
@@ -8,7 +9,24 @@ namespace BookShop.ViewModels;
 
 public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ISampleDataService _sampleDataService;
+    public readonly INavigationService _navigationService;
+
+    private bool _isLoading = false;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set => SetProperty(ref _isLoading, value);
+    }
+
+    public ILocalSettingsService LocalSettingsService
+    {
+        get;
+    }
+    public INavigationService NavigationService
+    {
+        get;
+    }
+
     private Product? _item;
 
     public Product? Item
@@ -17,9 +35,10 @@ public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
         set => SetProperty(ref _item, value);
     }
 
-    public ProductsDetailViewModel(ISampleDataService sampleDataService)
+    public ProductsDetailViewModel(INavigationService navigationService, ILocalSettingsService localSettingsService)
     {
-        _sampleDataService = sampleDataService;
+        NavigationService = navigationService;
+        LocalSettingsService = localSettingsService;    
     }
 
     public void OnNavigatedTo(object parameter)
@@ -32,5 +51,13 @@ public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
 
     public void OnNavigatedFrom()
     {
+    }
+    public async Task OnDeleteProduct()
+    {
+        await App.Repository.Products.DeleteProductAsync((int)Item.Id);
+    }
+    public void OnEditProductClick()
+    {
+        NavigationService.NavigateTo(typeof(UpsertProductViewModel).FullName!, Item);
     }
 }

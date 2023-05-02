@@ -23,7 +23,11 @@ public class RestCategoriesRepository : ICategoriesRepository
         return result;
     }
     public async Task<IEnumerable<Categories>> GetCategoriesWithQueryAsync(string query) => await _http.GetAsync<IEnumerable<Categories>>($"{_controller}?{query}", _accessToken);
-    public async Task<Categories> GetCategoryByIdAsync(int id) => await _http.GetAsync<Categories>($"{_controller}?id=eq.{id}", _accessToken);
+    public async Task<IEnumerable<Categories>> GetCategoryByIdAsync(int id) {
+        
+        List<Categories> result = new List<Categories>(await _http.GetAsync<IEnumerable<Categories>>($"{_controller}?id=eq.{id}", _accessToken));
+        return result;
+    } 
     public async Task<IEnumerable<Categories>> UpsertCategoryAsync(Categories categories) {
         List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
         headers.Add(KeyValuePair.Create("Prefer", "return=representation"));

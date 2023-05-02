@@ -10,6 +10,7 @@ using BookShop.Contracts.Services;
 using Windows.Storage.Pickers;
 using Windows.Globalization.NumberFormatting;
 using Windows.Globalization;
+using Newtonsoft.Json.Linq;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -19,14 +20,14 @@ namespace BookShop.Views;
 /// <summary>
 /// Add new product page
 /// </summary>
-public sealed partial class AddProductPage : Page
+public sealed partial class UpsertProductPage : Page
 {
     private List<Categories>? _categories;
-    public AddProductViewModel ViewModel { get; }
+    public UpsertProductViewModel ViewModel { get; }
 
-    public AddProductPage()
+    public UpsertProductPage()
     {
-        ViewModel = App.GetService<AddProductViewModel>();
+        ViewModel = App.GetService<UpsertProductViewModel>();
         InitializeComponent();
         Loaded += OnLoaded;
     }
@@ -48,9 +49,26 @@ public sealed partial class AddProductPage : Page
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
-        base.OnNavigatedTo(e);
-    }
 
+        base.OnNavigatedTo(e);
+        InitializeEditData();
+
+
+    }
+    public async void InitializeEditData()
+    {
+             
+        if(ViewModel.Item.Name != "")
+        {
+
+            categoryBox.Text = ViewModel.Item.Category!.Name;
+
+            orgPriceNumberBox.IsEnabled = false;
+            orgQuantityNumberBox.IsEnabled = false;
+            ViewModel.ImagePreview = ViewModel.Item.Image;
+            button.Content = "Save";
+        }
+    }
     protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
     {
         base.OnNavigatingFrom(e);
@@ -123,7 +141,7 @@ public sealed partial class AddProductPage : Page
         }
     }
 
-    private async void OnAddProductClick(object sender, RoutedEventArgs e)
+    private async void OnButtonClick(object sender, RoutedEventArgs e)
     {
         string message = string.Empty;
         if (!ViewModel.ValidateField(ref message))
@@ -132,36 +150,71 @@ public sealed partial class AddProductPage : Page
             return;
         }
 
-        string image = "";
+        ViewModel.IsLoading = true;
+        string image = ViewModel.ImagePreview;
+
         try
         {
-            ViewModel.IsLoading = true;
-            
-            string webUrl = await App.Repository.Storage.UploadImageAsync(ViewModel.Item.Image, ViewModel.Item.ImagePath);
-            image = ViewModel.Item.Image;
-
-            ViewModel.Item.Image = webUrl;
-            ViewModel.Item.Quantity = ViewModel.Item.OriginalQuantity;
-
-            var result = await App.Repository.Products.UpsertProductAsync(ViewModel.Item);
+            var result = await OnCreateOrUpdateProduct();
             ViewModel.IsLoading = false;
 
-            if (result.ToList().Count != 0)
+            if (button.Content == "Add")
             {
-                await App.MainWindow.ShowMessageDialogAsync("Add product successfully", "Success");
+                if (result != null)
+                {
+                    ViewModel.Item = result;
+                    await App.MainWindow.ShowMessageDialogAsync("Add product successfully", "Success");
+                }
+                else
+                {
+                    await App.MainWindow.ShowMessageDialogAsync("Add product unsuccessfully", "Fail");
+                }
             }
             else
             {
-                await App.MainWindow.ShowMessageDialogAsync("Add product unsuccessfully", "Fail");
+                if (result != null)
+                {
+                    ViewModel.Item = result;
+                    await App.MainWindow.ShowMessageDialogAsync("Update product successfully", "Success");
+                }
+                else
+                {
+                    await App.MainWindow.ShowMessageDialogAsync("Update product unsuccessfully", "Fail");
+                }
             }
-        } 
+        }
+        catch (HttpRequestException httpEx)
+        {
+            await App.MainWindow.ShowMessageDialogAsync("Please check your internet connection!", "Unexpected Error!");
+            ViewModel.Item.Image = image;
+            await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+        }
         catch (Exception ex)
         {
-            ViewModel.IsLoading = false;
             await App.MainWindow.ShowMessageDialogAsync(ex.Message, "Unexpected Error!");
             ViewModel.Item.Image = image;
             await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
         }
+        finally
+        {
+            ViewModel.IsLoading = false;
+        }
+
+    }
+
+    private async Task<Product> OnCreateOrUpdateProduct()
+    {
+        if (ViewModel.ImagePreview != ViewModel.Item.Image)
+        {
+            string webUrl = await App.Repository.Storage.UploadImageAsync(ViewModel.ImagePreview, ViewModel.Item.ImagePath);
+            ViewModel.Item.Image = webUrl;
+        }
+
+        ViewModel.Item.Quantity = ViewModel.Item.OriginalQuantity;
+        ViewModel.Item.Category = null;
+        var result = await App.Repository.Products.UpsertProductAsync(ViewModel.Item);
+
+        return result.FirstOrDefault();
     }
 
     private async void OnSelectImageClick(object sender, RoutedEventArgs e)

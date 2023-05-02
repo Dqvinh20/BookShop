@@ -103,8 +103,8 @@ public class LoginViewModel : ObservableObject
 
     public async void LoginButton_Click(object sender, RoutedEventArgs e)
     {
-        // ViewModel.Account.Username = "DemoAccount";
-        // ViewModel.Account.Password = "123456";
+        Account.Username = "DemoAccount";
+        Account.Password = "123456";
 
         IsLoading = true;
         var isAuth = await CheckAuthenticated();
