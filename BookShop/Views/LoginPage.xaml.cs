@@ -45,7 +45,7 @@ public sealed partial class LoginPage : Page
         var themeService = App.GetService<IThemeSelectorService>();
         await themeService.SetRequestedThemeAsync();
     }
-
+        
     private void RevealModeCheckbox_Changed(object sender, RoutedEventArgs e)
     {
         if (revealModeCheckBox.IsChecked == true)

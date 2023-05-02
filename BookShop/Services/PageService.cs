@@ -17,7 +17,7 @@ public class PageService : IPageService
         Configure<DashboardViewModel, DashboardPage>();
         Configure<ProductsViewModel, HomePage>();
         Configure<ProductsDetailViewModel, ProductsDetailPage>();
-        Configure<AddProductViewModel, AddProductPage>();
+        Configure<UpsertProductViewModel, UpsertProductPage>();
         Configure<CreateOrderViewModel, CreateOrderPage>();
         Configure<OrdersViewModel, OrdersPage>();
         Configure<StatisticsViewModel, StatisticsPage>();

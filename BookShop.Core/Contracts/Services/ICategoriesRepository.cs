@@ -21,7 +21,7 @@ public interface ICategoriesRepository
     /// <summary>
     /// Returns the categories with the given id. 
     /// </summary>
-    Task<Categories> GetCategoryByIdAsync(int id);
+    Task<IEnumerable<Categories>> GetCategoryByIdAsync(int id);
 
     /// <summary>
     /// Adds a new categories if the categories does not exist, updates the 

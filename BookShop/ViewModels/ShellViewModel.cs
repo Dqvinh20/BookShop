@@ -51,7 +51,6 @@ public class ShellViewModel : ObservableRecipient
 
     public async Task SaveNavigationHistory()
     {
-        Console.WriteLine(_selectedPageKey);
         await LocalSettingsService.SaveSettingAsync("NavigationState", _selectedPageKey ?? "");
     }
 
@@ -59,7 +58,7 @@ public class ShellViewModel : ObservableRecipient
     {
         var data = await LocalSettingsService.ReadSettingAsync<string>("NavigationState");
 
-        if (data == string.Empty)
+        if (data == null || data == string.Empty)
         {
             NavigationService.NavigateTo(typeof(ProductsViewModel).FullName!, null, true);
         }

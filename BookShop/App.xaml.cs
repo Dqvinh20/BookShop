@@ -95,8 +95,8 @@ public partial class App : Application
             services.AddTransient<LoginViewModel>();
             services.AddTransient<LoginPage>();
 
-            services.AddTransient<AddProductViewModel>();
-            services.AddTransient<AddProductPage>();
+            services.AddTransient<UpsertProductViewModel>();
+            services.AddTransient<UpsertProductPage>();
 
             services.AddTransient<CategoriesViewModel>();
             services.AddTransient<CategoriesPage>();
@@ -131,6 +131,7 @@ public partial class App : Application
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
         Console.WriteLine(sender);
         Console.WriteLine(e.Message);
+        Console.WriteLine(e.Exception.StackTrace);
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
