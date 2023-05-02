@@ -31,7 +31,6 @@ public class CategoriesViewModel : ObservableRecipient, INavigationAware
     public async void OnNavigatedTo(object parameter)
     {
         Source.Clear();
-        // TODO: Replace with real data.
         IsBusy = true;
 
         var data = await App.Repository.Categories.GetAllCategoriesAsync();
