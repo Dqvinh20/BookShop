@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Shapes;
+using Newtonsoft.Json.Linq;
 
 namespace BookShop.Views;
 
@@ -31,6 +32,7 @@ public sealed partial class CategoriesPage : Page
         }
         set
         {
+            ViewModel.IsNotEmpty = value != null;
             SetValue(SelectedItemProperty, value);
         }
     }
@@ -39,7 +41,7 @@ public sealed partial class CategoriesPage : Page
     {
         ViewModel = App.GetService<CategoriesViewModel>();
         InitializeComponent();
-
+        ViewModel.IsNotEmpty = SelectedItem != null;
     }
 
     private void Category_TemplatePointerPressed(object sender, PointerRoutedEventArgs e)
@@ -85,7 +87,6 @@ public sealed partial class CategoriesPage : Page
                 break;
             case "Delete":
                 ShowDialog_Clicked("Delete");
-                
                 break;
                 
         }

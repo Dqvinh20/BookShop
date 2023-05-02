@@ -9,81 +9,132 @@
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
+        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
                         <!--641 is the default CompactModeThresholdWidth in NavigationView -->
-                        <AdaptiveTrigger MinWindowWidth="641" />
+                        <AdaptiveTrigger MinWindowWidth="741" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="title.(RelativePanel.RightOf)" Value="itemHero" />
+                        <Setter Target="title.(RelativePanel.AlignTopWithPanel)" Value="True" />
+                        <Setter Target="propertiesGroup0.(RelativePanel.RightOf)" Value="itemHero" />
                         <Setter Target="propertiesGroup1.(RelativePanel.RightOf)" Value="itemHero" />
-                        <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="title" />
+                        <Setter Target="propertiesGroup1.(RelativePanel.Below)" Value="propertiesGroup0" />
+                        
                         <Setter Target="propertiesGroup2.(RelativePanel.RightOf)" Value="propertiesGroup1" />
                         <Setter Target="propertiesGroup2.(RelativePanel.Below)" Value="title" />
+                        <Setter Target="description.(RelativePanel.Below)" Value="itemHero" />
                         <Setter Target="propertiesGroup1.Width" Value="200" />
+                        <Setter Target="itemHero.Width" Value="300" />
+
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!--641 is the default CompactModeThresholdWidth in NavigationView -->
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="title.(RelativePanel.Below)" Value="itemHero" />
+                        <Setter Target="title.(RelativePanel.AlignTopWithPanel)" Value="False" />
+
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
         <ScrollViewer
-            IsTabStop="True">
-            <StackPanel
+            IsTabStop="True"
+            VerticalScrollBarVisibility="Auto"
+            >
+            <StackPanel>
+
+                <CommandBar DefaultLabelPosition="Right" IsSticky="true" >
+                    <AppBarButton Icon="Edit" Label="Edit" Click="EditProductClick" />
+                    <AppBarButton Icon="Delete" Label="Delete" Click="ShowDialog_Click" />
+                </CommandBar>
+
+                <StackPanel
                 x:Name="contentPanel">
-                <RelativePanel>
-                    <Grid
+                    <RelativePanel>
+                        <Grid
                         x:Name="itemHero"
-                        Width="200"
-                        Height="200"
+                        Width="300"
                         Margin="{StaticResource SmallRightMargin}"
                         Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
+                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignTopWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True">
-                        <!--<FontIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="70"
-                            Glyph="{x:Bind ViewModel.Item.Symbol}"
-                            AutomationProperties.Name="{x:Bind ViewModel.Item.SymbolName}" />-->
-                    </Grid>
+                        >
+                            <Image x:Name="bookImg" Stretch="Fill"
+                               HorizontalAlignment="Center"
+                            Source="{x:Bind ViewModel.Item.Image}" />
+                        </Grid>
 
-                    <TextBlock
+
+                        <TextBlock
                         x:Name="title"
                         Margin="{StaticResource XXSmallTopMargin}"
-                        RelativePanel.AlignTopWithPanel="True"
-                        RelativePanel.RightOf="itemHero"
+                        RelativePanel.AlignTopWithPanel="False"
+                        RelativePanel.Below="itemHero"
                         Style="{ThemeResource TitleTextBlockStyle}"
                         Text="{x:Bind ViewModel.Item.Name, Mode=OneWay}" />
 
-                    <StackPanel x:Name="propertiesGroup1" RelativePanel.Below="itemHero">
-                        <StackPanel x:Name="statusGroup" Margin="{StaticResource SmallTopMargin}">
-                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Status" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Publisher}" />
+                        <StackPanel x:Name="propertiesGroup0" RelativePanel.Below="title" HorizontalAlignment="Stretch">
+                            <StackPanel x:Name="author" Margin="{StaticResource SmallTopMargin}">
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Author" />
+                                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Author}" />
+                            </StackPanel>
                         </StackPanel>
 
-                        <StackPanel x:Name="orderDateGroup" Margin="{StaticResource SmallTopMargin}">
-                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Order date" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.PublishedYear}" />
-                        </StackPanel>
-                    </StackPanel>
+                        <StackPanel x:Name="propertiesGroup1" RelativePanel.Below="propertiesGroup0" >
+                            <StackPanel x:Name="publisher" Margin="{StaticResource SmallTopMargin}">
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Publisher" />
+                                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Publisher}" />
+                            </StackPanel>
 
-                    <StackPanel x:Name="propertiesGroup2" RelativePanel.Below="propertiesGroup1">
-                        <StackPanel x:Name="shipToGroup" Margin="{StaticResource SmallTopMargin}">
-                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Ship to" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Price}" />
+
+                            <StackPanel x:Name="publishedYear" Margin="{StaticResource SmallTopMargin}" >
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Published Year" />
+                                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.PublishedYear}" />
+                            </StackPanel>
                         </StackPanel>
 
-                        <StackPanel x:Name="orderTotalGroup" Margin="{StaticResource SmallTopMargin}">
-                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Order total" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.OriginalPrice}" />
-                        </StackPanel>
-                    </StackPanel>
+                        <StackPanel x:Name="propertiesGroup2" RelativePanel.Below="propertiesGroup1" >
+                            <StackPanel x:Name="price" Margin="{StaticResource SmallTopMargin}">
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Price" />
+                                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Price}" />
+                            </StackPanel>
 
-                </RelativePanel>
+                            <StackPanel x:Name="quantity" Margin="{StaticResource SmallTopMargin}">
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Quantity" />
+                                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Quantity}" />
+                            </StackPanel>
+
+                            <StackPanel  Margin="{StaticResource SmallTopMargin}">
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Category" />
+                                <TextBlock x:Name="categoryName" Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Category.Name}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel x:Name="description" Margin="{StaticResource LargeTopMargin}" RelativePanel.Below="propertiesGroup2">
+                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Description"/>
+                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Description}" />
+
+                        </StackPanel>
+
+                    </RelativePanel>
+                </StackPanel>
+
             </StackPanel>
         </ScrollViewer>
+        <controls:Loading 
+        x:Name="LoadingControl"
+        IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+        Style="{StaticResource DefaultLoading}"/>
+
     </Grid>
 </Page>

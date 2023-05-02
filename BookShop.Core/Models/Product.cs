@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -130,6 +131,11 @@ public class Product
             $"PublishedYear = {PublishedYear}, Price = {Price}, OrgPrice = {OriginalPrice}, " +
             $"Quantity = {Quantity}, OrgQuantity = {OriginalQuantity}, " +
             $"Discount = {Discount}, CategoryId = {CategoryId}, " +
-            $"Catogory={Category ?? null})";
+            $"Category={Category ?? null})";
+    }
+
+    public override bool Equals(object obj)
+    {
+        return IsSameProduct(obj as Product) && this.Category == (obj as Product).Category;
     }
 }
