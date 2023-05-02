@@ -50,7 +50,6 @@ public class UpsertProductViewModel : ObservableRecipient, INavigationAware
         }
         else if(parameter is Product item)
         {
-            Console.WriteLine(item.Category.ToString());
             Item = item;
             return;
         }

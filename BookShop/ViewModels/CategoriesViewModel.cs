@@ -35,9 +35,12 @@ public class CategoriesViewModel : ObservableRecipient, INavigationAware
         IsBusy = true;
 
         var data = await App.Repository.Categories.GetAllCategoriesAsync();
-        IsNotEmpty = data.ToArray().Length != 0;
         foreach (var item in data)
         {
+            if (item.Id == 1)
+            {
+                continue;
+            }
             Source.Add(item);
         }
         IsBusy = false;

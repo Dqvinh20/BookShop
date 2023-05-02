@@ -1,3 +1,8 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 ﻿using Newtonsoft.Json;
 
 namespace BookShop.Core.Models;
@@ -15,7 +20,6 @@ public class InvoiceDetail
     {
         get; set;
     }
-
     [JsonProperty("product_id")]
     public int? ProductId
     {

@@ -1,9 +1,11 @@
-﻿using BookShop.Contracts.Services;
+﻿using System.Diagnostics;
+using BookShop.Contracts.Services;
 using BookShop.Contracts.ViewModels;
 using BookShop.Core.Contracts.Services;
 using BookShop.Core.Models;
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Xaml.Controls;
 
 namespace BookShop.ViewModels;
 
@@ -16,6 +18,11 @@ public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
     {
         get => _isLoading;
         set => SetProperty(ref _isLoading, value);
+    }
+
+    public TextBlock CategoryName
+    {
+        set; get;
     }
 
     public ILocalSettingsService LocalSettingsService
@@ -41,12 +48,20 @@ public class ProductsDetailViewModel : ObservableRecipient, INavigationAware
         LocalSettingsService = localSettingsService;    
     }
 
-    public void OnNavigatedTo(object parameter)
+    public async void OnNavigatedTo(object parameter)
     {
+        Debug.WriteLine("Load");
         if (parameter is Product product)
         {
             Item = product;
+            if (Item.Category == null)
+            {
+                var item = await App.Repository.Products.GetProductByIdAsync((int)Item.Id);
+                Item = item;
+                CategoryName.Text = Item.Category.Name;
+            }
         }
+
     }
 
     public void OnNavigatedFrom()

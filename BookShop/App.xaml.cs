@@ -125,13 +125,14 @@ public partial class App : Application
         UnhandledException += App_UnhandledException;
     }
 
-    private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+    private async void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
         // TODO: Log and handle exceptions as appropriate.
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
         Console.WriteLine(sender);
         Console.WriteLine(e.Message);
         Console.WriteLine(e.Exception.StackTrace);
+        await App.MainWindow.ShowMessageDialogAsync(e.Exception.StackTrace, "Unexpected error!");
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
