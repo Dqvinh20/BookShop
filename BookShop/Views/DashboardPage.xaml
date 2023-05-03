@@ -4,9 +4,129 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:BookShop.Models"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:media="using:Microsoft.UI.Xaml.Media"
+    xmlns:modelsCore="using:BookShop.Core.Models"
+    
     mc:Ignorable="d">
+    <Page.Resources>
+        <StaticResource x:Key="GridViewItemBackgroundSelected" ResourceKey="AccentFillColorDefaultBrush" />
+        <StaticResource x:Key="GridViewItemBackgroundSelectedPointerOver" ResourceKey="AccentFillColorSecondaryBrush" />
+        <StaticResource x:Key="GridViewItemForegroundSelected" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
 
+
+        <DataTemplate x:Key="DashboardItem" x:DataType="models:DashboardItem">
+            <UserControl >
+                <Grid
+                        Padding="12"
+                        x:Name="CategoryTemplateRoot"
+                        HorizontalAlignment="Stretch"
+                        x:DefaultBindMode="OneWay"
+                        Background="{Binding BackgroundColor}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="20"
+                        ToolTipService.ToolTip="{Binding Title}"
+                    >
+
+                    <StackPanel Orientation="Vertical" Background="Transparent">
+                        <TextBlock
+                            x:Name="CategoryName"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource TitleTextBlockStyle}"
+                            Text="{Binding Title}"
+                            TextTrimming="CharacterEllipsis"
+                            TextWrapping="NoWrap" />
+                        <TextBlock
+                            x:Name="CategoryName1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource TitleTextBlockStyle}"
+                            Text="{Binding Content}"
+                            TextTrimming="CharacterEllipsis"
+                            TextWrapping="NoWrap" />    
+                        
+                    </StackPanel>
+                </Grid>
+            </UserControl>
+        </DataTemplate>
+        <DataTemplate x:Key="ProductTemplate" x:DataType="modelsCore:Product">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Padding="12">
+                <Image x:Name="itemImage" HorizontalAlignment="Center" Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
+                <TextBlock
+                    Margin="12,12,12,0"
+                    HorizontalAlignment="Center"
+                    TextWrapping="Wrap"
+                    TextTrimming="WordEllipsis" 
+                    Style="{ThemeResource ProductTitleTextStyle}"
+                    Text="{x:Bind Name}" />
+
+                <TextBlock
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Center"
+                    TextWrapping="NoWrap"
+                    Style="{ThemeResource PriceTextStyle}"
+                    x:DefaultBindMode="OneWay"
+                    Text="{x:Bind Quantity}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        <media:AcrylicBrush x:Key="CustomAcrylicInAppBrush" TintOpacity="0.8" TintColor="Transparent" FallbackColor="Black"/>
+
+    </Page.Resources>
     <Grid x:Name="ContentArea">
         
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical">
+                <ItemsRepeater
+                    x:Name="ItemRepeater"
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Stretch"
+                    MinWidth="100"
+                           
+                    ItemsSource="{x:Bind ViewModel.SummarySource, Mode=OneWay}"
+                    ItemTemplate ="{StaticResource DashboardItem}"
+                    >
+                    <ItemsRepeater.Layout>
+                        <controls:WrapLayout Orientation="Horizontal" HorizontalSpacing="6" VerticalSpacing="6"/>
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+                <TextBlock
+                    TextWrapping="NoWrap"
+                    Style="{ThemeResource SubheaderTextBlockStyle}">
+                    <Run Text="Out of stock products (&lt;"></Run>
+                    <Run Text="{x:Bind ViewModel.OutOfStockThreshold}"></Run>
+                    <Run Text=")"></Run>
+
+                </TextBlock>
+                <controls:Carousel 
+                        x:Name="CarouselControl"
+                        InvertPositive="True"
+                        ItemDepth="300"
+                        ItemMargin="0"
+                        ItemRotationX="0"
+                        ItemRotationY="30"
+                        ItemRotationZ ="0"
+                        Orientation="Horizontal"
+                        ItemsSource="{x:Bind ViewModel.ProductsSource}"
+                        ItemTemplate="{StaticResource ProductTemplate}"
+                        SelectedIndex="5">
+                    <controls:Carousel.EasingFunction>
+                        <CubicEase EasingMode="EaseOut" />
+                    </controls:Carousel.EasingFunction>
+                    
+                </controls:Carousel>
+            </StackPanel>
+
+        </ScrollViewer>
+        <controls:Loading 
+            x:Name="LoadingControl"
+            IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+            Style="{StaticResource DefaultLoading}"
+            />
     </Grid>
 </Page>
