@@ -7,8 +7,7 @@ using Newtonsoft.Json;
 
 namespace BookShop.Core.Models;
 
-[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]  
-
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class Invoice
 {
     [JsonProperty("id")]

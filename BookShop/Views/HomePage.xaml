@@ -149,7 +149,6 @@
                             <Button Content="Apply filter" Click="OnApplyFilterButtonClick" Margin="{StaticResource SmallRightMargin}"/>
                             <Button Content="Clear filter" Click="OnClearFilterButtonClick"/>
                         </StackPanel>
-
                     </StackPanel>
                 </controls:Expander>
             </StackPanel>
@@ -189,8 +188,9 @@
             RelativePanel.AlignBottomWithPanel="True"
             ColumnDefinitions="*,*"
             >
-            <custom:ProductCountControl 
-                x:Name="ProductCountControl"
+            <custom:CountControl 
+                PrefixText="Products per page: "
+                x:Name="CountControl"
                 CurrentProductCount="{x:Bind ViewModel.ItemPerPage, Mode=TwoWay}"
                 MaxProductCount="10"
                 MinProductCount="1"

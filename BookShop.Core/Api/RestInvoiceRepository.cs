@@ -60,5 +60,8 @@ public class RestInvoiceRepository : IInvoiceRepository
         return await _http.PostAsync<Invoice, IEnumerable<Invoice>>(_controller, invoice, _accessToken, headers);
     }
 
-    public async Task DeleteInvoiceAsync(int id) => throw new NotImplementedException();
+    public async Task DeleteInvoiceAsync(int id)
+    {
+        await _http.DeleteAsync($"{_controller}?id=eq.{id}", _accessToken);
+    }
 }

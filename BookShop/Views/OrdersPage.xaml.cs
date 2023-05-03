@@ -15,29 +15,26 @@ public sealed partial class OrdersPage : Page
     public OrdersPage()
     {
         ViewModel = App.GetService<OrdersViewModel>();
+        DataContext = this;
         InitializeComponent();
         Loaded += OnLoaded;
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
-        var data = await App.Repository.Invoice.GetAllInvoiceAsync();
-        foreach (var item in data)
-        {
-            foreach(var detail in item.InvoiceDetails)
-            {
-                Console.WriteLine(detail.Product);
-            }
-        }
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    await CreateSampleInvoice(i);
+        //}
     }
 
-    private async Task CreateSampleInvoice()
+    private async Task CreateSampleInvoice(int i)
     {
         // Tao customer trc
         Customer customer = new Customer()
         {
-            Name = "Tran Hong Quan",
-            PhoneNumber = "1234567890",
+            Name = "Tran Hong Quan " + i,
+            PhoneNumber = i.ToString(),
         };
         var newCustomerInfo = (await App.Repository.Invoice.CreateOrUpdateCustomerAsync(customer)).FirstOrDefault();
         Console.WriteLine(newCustomerInfo);
@@ -90,4 +87,11 @@ public sealed partial class OrdersPage : Page
     {
 
     }
+
+    private void AppBarButton_Drop(object sender, DragEventArgs e)
+    {
+
+    }
+
+    
 }

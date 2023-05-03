@@ -189,19 +189,24 @@ public sealed partial class UpsertProductPage : Page
         {
             await App.MainWindow.ShowMessageDialogAsync("Please check your internet connection!", "Unexpected Error!");
             ViewModel.Item.Image = image;
-            await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            if (button.Content == "Add")
+            {
+                await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            }
         }
         catch (Exception ex)
         {
             await App.MainWindow.ShowMessageDialogAsync(ex.Message, "Unexpected Error!");
             ViewModel.Item.Image = image;
-            await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            if (button.Content == "Add")
+            {
+                await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            }
         }
         finally
         {
             ViewModel.IsLoading = false;
         }
-
     }
 
     private async Task<Product> OnCreateOrUpdateProduct()

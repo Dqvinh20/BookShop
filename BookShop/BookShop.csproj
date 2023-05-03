@@ -16,8 +16,8 @@
     <UserSecretsId>afd0759d-b768-405b-8edb-09eb082f1495</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Custom\CountControl.xaml" />
     <None Remove="Custom\PaginationControl.xaml" />
-    <None Remove="Custom\ProductCountControl.xaml" />
     <None Remove="Styles\Loading.xaml" />
     <None Remove="Views\PaginationControl.xaml" />
     <None Remove="Views\UpsertProductPage.xaml" />
@@ -61,7 +61,7 @@
     <Page Update="Styles\Loading.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Custom\ProductCountControl.xaml">
+    <Page Update="Custom\CountControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\UpsertProductPage.xaml">

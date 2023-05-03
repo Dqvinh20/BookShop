@@ -142,14 +142,10 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
 
     public async Task Refesh(bool isFetchNewData = false)
     {
-        Debug.WriteLine("Before");
         if (isFetchNewData)
         {
-            Debug.WriteLine("While");
-
             OriginItem = new ObservableCollection<Product>(await App.Repository.Products.GetAllProductsAsync());
         }
-        Debug.WriteLine("After");
 
         _updateDataSource(_currentPage);
         _updatePagingInfo();
