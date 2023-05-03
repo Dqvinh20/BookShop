@@ -285,6 +285,7 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
             sender.Text = selected;
         }
     }
+   
     #endregion
     public void OnAddProductClick()
     {

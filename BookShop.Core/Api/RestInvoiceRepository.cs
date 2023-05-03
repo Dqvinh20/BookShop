@@ -57,7 +57,7 @@ public class RestInvoiceRepository : IInvoiceRepository
         List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
         headers.Add(KeyValuePair.Create("Prefer", "return=representation"));
         headers.Add(KeyValuePair.Create("Prefer", "resolution=merge-duplicates"));
-        return await _http.PostAsync<Invoice, IEnumerable<Invoice>>(_controller, invoice, _accessToken, headers);
+        return await _http.PostAsync<Invoice, IEnumerable<Invoice>>($"{_controller}?select=*,customers(*),invoice_detail(*,products(*))", invoice, _accessToken, headers);
     }
 
     public async Task DeleteInvoiceAsync(int id)

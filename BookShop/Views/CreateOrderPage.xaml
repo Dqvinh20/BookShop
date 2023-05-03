@@ -4,374 +4,234 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:CommunityToolkit.WinUI.UI.Converters"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:models="using:BookShop.Core.Models"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <converters:StringFormatConverter x:Key="StringFormatConverter"/>
+        <converters:EmptyObjectToObjectConverter x:Key="EmptyObjectToBoolConverter" EmptyValue="False" NotEmptyValue="True"/>
+        <converters:BoolToVisibilityConverter x:Key="NegBoolToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible"/>
+    </Page.Resources>
+
     <Grid x:Name="ContentArea">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="850*"/>
-            <ColumnDefinition Width="25*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="450*"/>
-            <RowDefinition Height="380*"/>
-            <RowDefinition Height="100*"/>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="30*"/>
-        </Grid.RowDefinitions>
-
-
-        <Grid Grid.Column="1"
-              Grid.Row="1">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.3*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="0.6*"/>
+                <ColumnDefinition Width="0.4*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel
-            Grid.Column="0"
-            Grid.Row="1"
-            Background="#2f2f2f"
-            Padding="14"
-            Margin="0, 0, 30, 25">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35*"/>   
-                        <RowDefinition Height="40*"/>
-                        <RowDefinition Height="350*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="BOOK OURCHASED" Margin="0 0 0 5" FontSize="13" FontWeight="Medium"/>
-
-                    <Grid Grid.Row="1">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3.5*"/>
-                            <ColumnDefinition Width="1.5*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <Grid Grid.Column="0"
-                                VerticalAlignment="Center"
-                                Margin="2, 0, 0, 0">
-
-                            <Border Name="bookComboBoxBorder"
-                                    Height="30"
-                            BorderBrush="Black"
-                            Background="{Binding Background, ElementName=bookComboBox}"
-                            BorderThickness="1"
-                            CornerRadius="4">
-
-                            </Border>
-
-                            <ComboBox Name="bookComboBox"
-                              HorizontalAlignment="Stretch"
-                              Height="26"
-                              SelectedIndex="-1"
-                              IsEditable="True"
-                              HorizontalContentAlignment="Left"
-                              BorderThickness="0"
-                              Margin="12, 0, 12, 2"
-                              SelectionChanged="bookComboBox_SelectionChanged">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="Book Name"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </Grid>
-
-                        <Grid Margin="18, 0, 0, 0" Grid.Column="1">
-
-                            <TextBox Name="importQuantityTextBox"
-                                     VerticalAlignment="Center"
-                             Margin="2, 0, 0 ,0"
-                             FontSize="13"
-                             Height="30"
-                             PlaceholderText="Quantity"
-                             Grid.Column="1"
-                             Grid.Row="1"/>
-                        </Grid>
-
-                        <Button Name="addBookButton"
-                                    Click="addBookButton_Click"
-                                    Margin="19,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Grid.Column="2"
-                                    Style="{StaticResource AccentButtonStyle}"
-                                    Height="30">
-
-
-                            <FontIcon Glyph="&#xE710;" FontSize="13"/>
-                        </Button>
-
-                    </Grid>
-
-                </Grid>
-            </StackPanel>
-
-            <StackPanel
-            Grid.Column="1"
-            Grid.Row="1"
-            Background="#2f2f2f"
-            Padding="14"
-            Margin="0, 0, 0, 25">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="0.8*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="0.8*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="0.8*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="CUSTOMER" Margin="2 0 0 5" FontSize="12" FontWeight="Medium"/>
-
-                    <TextBox Name="customerTextBox"
-                             VerticalAlignment="Top"
-                             HorizontalAlignment="Stretch"
-                             Margin="2 0 0 0"
-                             FontSize="11"
-                             PlaceholderText="Tên khách hàng"
-                             Grid.Row="1"/>
-
-                    <TextBlock Text="ADDRESS"
-                            Grid.Row="2"
-                            Margin="2 5 0 5" FontSize="12" FontWeight="Medium"/>
-
-                    <TextBox Name="addressTextBox"
-                                     VerticalAlignment="Top"
-                             HorizontalAlignment="Stretch"
-                             Margin="2 0 0 0"
-                             FontSize="11"
-                             PlaceholderText="Địa chỉ giao hàng"
-                             Grid.Row="3"/>
-
-                    <TextBlock Grid.Row="4" Margin="2 5 0 5" Text="PHONE NUMBER" FontSize="12" FontWeight="Medium"/>
-
-
-                    <TextBox Name="phoneTextBox" Grid.Row="5"
-                                     VerticalAlignment="Top"
-                             HorizontalAlignment="Stretch"
-                             Margin="2 0 0 0"
-                             FontSize="11"
-                             PlaceholderText="Số điện thoại"
-                             Grid.Column="0"/>
-                </Grid>
-            </StackPanel>
-        </Grid>
-
-        <Grid Grid.Column="1" Grid.Row="2">
-
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*"/>
-                <RowDefinition Height="200*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="250"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
-            <StackPanel Background="#134b5f" Grid.Row="0" Padding="0 2 0 2">
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.12*"/>
-                        <ColumnDefinition Width="1.4*"/>
-                        <ColumnDefinition Width="0.1*"/>
-                        <ColumnDefinition Width="0.7*"/>
-                        <ColumnDefinition Width="0.1*"/>
-                        <ColumnDefinition Width="0.7*"/>
-                        <ColumnDefinition Width="0.1*"/>
-                        <ColumnDefinition Width="0.8*"/>
-                        <ColumnDefinition Width="0.05*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Book Name"
-                                           Grid.Column="1"
-                                            VerticalAlignment="Center"
-                               FontWeight="Medium"
-                                   Foreground="White"/>
-
-                    <TextBlock Text="Price"
-                                           Grid.Column="3"
-                                            VerticalAlignment="Center"
-                               FontWeight="Medium"
-                                   Foreground="White"/>
-
-                    <TextBlock Text="Quantity"
-                                           Grid.Column="5"
-                                            VerticalAlignment="Center"
-                               FontWeight="Medium"
-                                   Foreground="White"/>
-
-                    <TextBlock Text="Total Money"
-                                           Grid.Column="7"
-                                            VerticalAlignment="Center"
-                               FontWeight="Medium"
-                                   Foreground="White"/>
-
-                </Grid>
-
-            </StackPanel>
-
-            <StackPanel
-            Grid.Column="0"
-            Grid.Row="1"
-            Background="#2f2f2f"
-            Padding="0, 14, 0, 14"
-            Margin="0, 10, 0, 0">
-
-                <!--<ListView Name="orderPreviewListView"
-                  Grid.Column="1"
-                  Grid.Row="2"
-                  Grid.RowSpan="2"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  Margin="0, 0, 10, 0">
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Visibility="{Binding Path=isActive, 
-                                            Converter={StaticResource isActiveConverter}}"
-                              Margin="2, 0, 10, 0">
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.12*"/>
-                                    <ColumnDefinition Width="1.4*"/>
-                                    <ColumnDefinition Width="0.1*"/>
-                                    <ColumnDefinition Width="0.7*"/>
-                                    <ColumnDefinition Width="0.1*"/>
-                                    <ColumnDefinition Width="0.7*"/>
-                                    <ColumnDefinition Width="0.1*"/>
-                                    <ColumnDefinition Width="0.66*"/>
-                                    <ColumnDefinition Width="0.05*"/>
-                                </Grid.ColumnDefinitions>
-
-
-                                 Binding data 
-                                <TextBlock 
-                                Margin="0, 0, 0, 0"
-                                Grid.Column="1"
-                                HorizontalAlignment="Left"
-                                Text="{Binding Name_Cake}"
+        
+            <Grid Grid.Column="0"
+                  Grid.Row="0"
+                  RowDefinitions="Auto,Auto,*"
+                  Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" 
+                  BorderThickness="1" 
+                  BorderBrush="{ThemeResource CircleElevationBorderBrush}" 
+                  CornerRadius="12"
+                  Padding="12, 8"
+                  Margin="{StaticResource SmallRightBottomMargin}"
+                  >
+                <Grid ColumnDefinitions="*,Auto,Auto">
+                    <AutoSuggestBox 
+                                x:Name="productAutoSuggestBox"
+                                Padding="{StaticResource MediumTopBottomMargin}"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource RegularText}"/>
-
-                                 Binding data 
-                                <TextBlock 
-                                Grid.Column="3"
-                                HorizontalAlignment="Left"
-                                Text="{Binding SELLING_PRICE_FOR_BINDING}"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource RegularText}"/>
-
-                                 Binding data 
-                                <TextBlock 
-                                Grid.Column="5"
-                                HorizontalAlignment="Left"
-                                Text="{Binding Order_Quantity}"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource RegularText}"/>
-
-                                 Binding data 
-                                <TextBlock 
-                                Grid.Column="7"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Text="{Binding Total_Price_FOR_BINDING}"
-                                Style="{StaticResource RegularText}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-
-                </ListView>-->
-            </StackPanel>
-        </Grid>
-
-        <StackPanel Grid.Row="3"
-                    Grid.Column="1"
-                    Margin="0, 10, 0, 0"
-                    HorizontalAlignment="Right">
-
-            <Grid Width="300"
-                  Margin="0, 10, 0, 0">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="1"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"
-                     FontWeight="Medium"
-                     FontSize="14"
-                     Text="TOTAL MONEY"/>
-
-                <!-- binding -->
-                <TextBlock Name="totalPriceTextBlock"
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        HorizontalAlignment="Right"
+                                VerticalContentAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                PlaceholderText="Type a book name"
+                                QueryIcon="Find"
+                                UpdateTextOnSelect="False"
+                                TextChanged="{x:Bind ViewModel.BookSearch_TextChanged, Mode=OneWay}"
+                                QuerySubmitted="{x:Bind ViewModel.BookSearch_QuerySubmitted, Mode=OneWay}"
+                                SuggestionChosen="{x:Bind ViewModel.BookSearch_SuggestionChosen, Mode=OneWay}"
+                            />
+                    <NumberBox 
                         VerticalAlignment="Center"
-                        Margin="0 0 10 0"
-                        FontWeight="Medium"
-                        FontSize="14"
-                        Text="0 đ"/>
+                        Margin="4, 0"
+                        MinWidth="100"
+                        Grid.Column="1"
+                        IsEnabled="{x:Bind ViewModel.SuggestedProduct, Mode=OneWay, Converter={StaticResource EmptyObjectToBoolConverter}}"
+                        Minimum="0"
+                        Maximum="{x:Bind ViewModel.SuggestedProduct.Quantity, Mode=OneWay, FallbackValue='0'}"
+                        Value="{x:Bind ViewModel.CurrentProductQuantity, Mode=TwoWay, FallbackValue='0'}"
+                        PlaceholderText="Quantity"
+                        MaxWidth="100"
+                        />
+                
+
+               
+                    <HyperlinkButton
+                            Grid.Column="2"
+                            x:Name="AddToCart"
+                            Click="{x:Bind ViewModel.OnAddToCartClick}"
+                            VerticalAlignment="Center"
+                            IsEnabled="{x:Bind ViewModel.SuggestedProduct, Converter={StaticResource EmptyObjectToBoolConverter}, Mode=OneWay}"
+                            >   
+                        <HyperlinkButton.ContentTemplate>
+                            <DataTemplate>
+                                <FontIcon Glyph="&#xECC8;" />
+                            </DataTemplate>
+                        </HyperlinkButton.ContentTemplate>
+                    </HyperlinkButton>
+                </Grid>
+                <AppBarButton Grid.Row="1" x:Name="removeButton" LabelPosition="Collapsed"  Icon="Delete" ToolTipService.ToolTip="Remove"
+                              Command="{x:Bind ViewModel.ItemDeleteCommand,Mode=OneWay}" 
+                              HorizontalAlignment="Right"
+                              IsEnabled="{x:Bind ViewModel.SelectedRow, Mode=OneWay,Converter={StaticResource EmptyObjectToBoolConverter}}"/>
+                <controls:DataGrid
+                    Grid.Row="2"
+                    x:Name="invoiceDetailCartDataGrid"
+                    Margin="12, 2"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    HorizontalScrollBarVisibility="Visible"
+                    VerticalScrollBarVisibility="Visible"
+                    RowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    RowForeground="{ThemeResource ApplicationForegroundThemeBrush}"
+                    AlternatingRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    AlternatingRowForeground="{ThemeResource ApplicationForegroundThemeBrush}"
+                    AreRowDetailsFrozen="True"
+                    AreRowGroupHeadersFrozen="True"
+                    CanUserSortColumns="True"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    ColumnHeaderHeight="32"
+                    MaxColumnWidth="400"
+                    GridLinesVisibility="Horizontal"
+                    HeadersVisibility="None"
+                    IsReadOnly="False"
+                    RowDetailsVisibilityMode="VisibleWhenSelected"
+                    SelectionMode="Single"
+                    FrozenColumnCount="5"
+                    SelectedItem="{x:Bind ViewModel.SelectedRow, Mode=TwoWay}"
+                    RowGroupHeaderPropertyNameAlternative="Range"
+                    ItemsSource="{x:Bind ViewModel.ProductsCart, Mode=OneWay}"
+                    AutoGenerateColumns="False"
+                    CellEditEnded="{x:Bind ViewModel.OnCellChange, Mode=OneWay}"
+                    >
+
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Width="0.75*" IsReadOnly="True" Header="Product Name" Binding="{Binding Product.Name}" Tag="Product_name" />
+                        <controls:DataGridTemplateColumn Width="0.25*" Header="Quantity" Tag="Quantity">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Quantity}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0,0,0"/>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                            <controls:DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate >
+                                    <NumberBox 
+                                        VerticalAlignment="Center"
+                                        Margin="4, 0"
+                                        MinWidth="100"
+                                        Minimum="0"
+                                        HorizontalAlignment="Center"
+                                        Maximum="{Binding Product.Quantity, Mode=OneWay, FallbackValue='0'}"
+                                        Value="{Binding Quantity, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, FallbackValue='0'}"
+                                        PlaceholderText="Quantity"
+                                        ValidationMode="InvalidInputOverwritten"
+                                        />
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellEditingTemplate>
+                        </controls:DataGridTemplateColumn>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
             </Grid>
 
+            <Grid Grid.Column="1" Margin="{StaticResource SmallBottomMargin}">
+                <StackPanel Orientation="Vertical">
+                    <TextBox Header="Customer Name" Text="{x:Bind ViewModel.CustomerName, Mode=TwoWay}"/>
+                    <TextBox Header="Phone Number" Text="{x:Bind ViewModel.PhoneNumber, Mode=TwoWay}"/>
+                    <TextBox Header="Address" Text="{x:Bind ViewModel.Address, Mode=TwoWay}"/>
+                </StackPanel>
+            </Grid>
 
-        </StackPanel>
-
-        <StackPanel Grid.Row="4"
-                    Grid.Column="1"
-                        Height="30"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Right">
-
-
-            <Button Name="cancelOrderButton"
-                        Style="{StaticResource AccentButtonStyle}"               
-                    Click="cancelOrderButton_Click">
-
-                <FontIcon Glyph="&#xE711;" FontSize="13"/>
-
-            </Button>
-
-            <Button Name="finishOrderButton"
-                        Width="162"
-                        Margin="18, 0, 0, 0"
-                        Style="{StaticResource AccentButtonStyle}"                     
-                    Click="finishOrderButton_Click">
-                <Grid Width="140">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.9*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-
-
-                    <FontIcon Glyph="&#xEADF;" FontSize="13"/>
-
-                    <TextBlock 
-                            HorizontalAlignment="Center"
-                            Grid.Column="1"
-                            Margin="0, 0, 22, 0"
-                            FontSize="13"
-                            Text="FINISH ORDER"/>
-                </Grid>
-
-            </Button>
-        </StackPanel>
-
-        <!-- Post mesage to notification to user here -->
-        <StackPanel Name="notiMessageSnackbar"
-                                 HorizontalAlignment="Left"
-                                 Margin="24, 0, 0, 8"
-                                 MaxWidth="1000"
-                                 Grid.Column="1"
-                                 Grid.Row="4"
-                                 Grid.RowSpan="2">
-        </StackPanel>
+            <Grid Grid.ColumnSpan="2" Grid.Row="1"  
+                  Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" 
+                    BorderThickness="1" 
+                    BorderBrush="{ThemeResource CircleElevationBorderBrush}" 
+                    CornerRadius="12"
+                    Padding="12, 0"
+                  >
+                <controls:DataGrid
+                        x:Name="invoiceDetailDataGrid"
+                        Margin="12"
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Visible"
+                        RowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                        RowForeground="{ThemeResource ApplicationForegroundThemeBrush}"
+                        AlternatingRowBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                        AlternatingRowForeground="{ThemeResource ApplicationForegroundThemeBrush}"
+                        AreRowDetailsFrozen="True"
+                        AreRowGroupHeadersFrozen="True"
+                        CanUserSortColumns="False"
+                        CanUserReorderColumns="True"
+                        CanUserResizeColumns="True"
+                        ColumnHeaderHeight="32"
+                        GridLinesVisibility="Horizontal"
+                        HeadersVisibility="Column"
+                        IsReadOnly="True"
+                        RowDetailsVisibilityMode="Collapsed"
+                        SelectionMode="Single"
+                        FrozenColumnCount="4"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{x:Bind ViewModel.ProductsCart, Mode=OneWay}"
+                                    >
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Width="*" Header="Product name" Binding="{Binding Product.Name}" Tag="Product_name" >
+                        </controls:DataGridTextColumn>
+                        <controls:DataGridTextColumn Header="Unit sell price" Binding="{Binding UnitSellPrice, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:n0}đ'}" Tag="Sell_price" >
+                            <controls:DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                                </Style>
+                            </controls:DataGridTextColumn.ElementStyle>
+                        </controls:DataGridTextColumn>
+                        <controls:DataGridTemplateColumn Header="Quantity" Tag="Quantity">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Quantity, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,0,0,0"/>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        
+                        </controls:DataGridTemplateColumn>
+                        <controls:DataGridTextColumn Header="Total Money" Binding="{Binding TotalMoney, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:n0}đ'}" Tag="Total_Money" >
+                            <controls:DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+                                </Style>
+                            </controls:DataGridTextColumn.ElementStyle>
+                        </controls:DataGridTextColumn>
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+            </Grid>
+            <TextBlock Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Right"
+                       Margin="{StaticResource SmallBottomMargin}"
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
+                       >
+                <Run Text="Total money: "></Run>
+                <Run Text="{x:Bind ViewModel.TotalInvoiceMoney, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:n0}đ'}"></Run>
+            </TextBlock>
+            <Button Grid.Row="3" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right"
+                    Content="Create"
+                    Style="{ThemeResource AccentButtonStyle}"
+                    Margin="{StaticResource SmallBottomMargin}"
+                    Click="OnAddNewInvoice"
+                    />
+        </Grid>
+        <controls:Loading 
+            x:Name="LoadingControl"
+            IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+            Style="{StaticResource DefaultLoading}"
+            />
     </Grid>
 </Page>

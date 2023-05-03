@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace BookShop.Core.Models;
 
 [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-public class InvoiceDetail
+public class InvoiceDetail : INotifyPropertyChanged
 {
     [JsonProperty("ordinal_number")]
     public int? Id
@@ -51,7 +52,10 @@ public class InvoiceDetail
     }
 
     [JsonProperty("products")]
-    public Product Product
+    public Product? Product
     {
-    get; set; }
+        get; set;
+    } = null;
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }

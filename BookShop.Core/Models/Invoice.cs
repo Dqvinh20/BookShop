@@ -37,5 +37,5 @@ public class Invoice
     } = null;
 
     [JsonProperty("invoice_detail")]
-    public IEnumerable<InvoiceDetail>? InvoiceDetails { get; set; } = null;
+    public List<InvoiceDetail>? InvoiceDetails { get; set; } = null;
 }

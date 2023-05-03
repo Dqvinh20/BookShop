@@ -125,6 +125,17 @@ public partial class App : Application
         UnhandledException += App_UnhandledException;
     }
 
+    public static void SetMinWidthWindow(int width)
+    {
+        var manager = WinUIEx.WindowManager.Get(App.MainWindow);
+        manager.MinWidth = width;
+    }
+
+    public static void SetMinHeightWindow(int height)
+    {
+        var manager = WinUIEx.WindowManager.Get(App.MainWindow);
+        manager.MinHeight = height;
+    }
     private async void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
         // TODO: Log and handle exceptions as appropriate.

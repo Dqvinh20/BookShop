@@ -41,10 +41,10 @@ public class OrdersViewModel : ObservableRecipient, INavigationAware
 
     // Filter info
     private Func<Invoice, bool>? _filterFunc = null;
-    private DateTimeOffset? _fromDate = DateTime.Now.Date;
-    private DateTimeOffset? _toDate = DateTime.Now.Date;
+    private DateTimeOffset _fromDate = DateTime.Now.Date;
+    private DateTimeOffset _toDate = DateTime.Now.Date;
 
-    public DateTimeOffset? CurrentDate { get; } = DateTime.Now.Date;
+    public DateTimeOffset CurrentDate { get; } = DateTime.Now.Date;
 
     private bool _isLoading = false;
 
@@ -88,7 +88,7 @@ public class OrdersViewModel : ObservableRecipient, INavigationAware
         get => _filterFunc;
     }
 
-    public DateTimeOffset? FromDate
+    public DateTimeOffset FromDate
     {
         set
         {
@@ -99,7 +99,7 @@ public class OrdersViewModel : ObservableRecipient, INavigationAware
             return _fromDate;
         }
     }
-    public DateTimeOffset? ToDate
+    public DateTimeOffset ToDate
     {
         set
         {
@@ -115,7 +115,6 @@ public class OrdersViewModel : ObservableRecipient, INavigationAware
     {
         FilteredItems = new AdvancedCollectionView(OriginalInvoices, true);
         ItemDeleteCommand = new AsyncRelayCommand(OnItemDeleteClick);  
-        //FilteredItems.SortDescriptions.Add(new SortDescription(nameof(Invoice.CreatedAt), SortDirection.Descending));
     }
 
     public async void OnMenuFlyoutItemClick(object sender, RoutedEventArgs e)
@@ -126,7 +125,7 @@ public class OrdersViewModel : ObservableRecipient, INavigationAware
             {
                 FilterFunc = (invoice) =>
                 {
-                    return invoice.CreatedAt >= FromDate && invoice.CreatedAt <= ToDate;
+                    return invoice.CreatedAt >= FromDate.DateTime && invoice.CreatedAt <= ToDate.DateTime.AddDays(1);
                 };
             }
             else
@@ -195,24 +194,21 @@ public class OrdersViewModel : ObservableRecipient, INavigationAware
     }
 
     #endregion
-    private void _setMinWidthWindow(int width)
-    {
-        var manager = WinUIEx.WindowManager.Get(App.MainWindow);
-        manager.MinWidth = width;
-    }
+   
 
     public async void OnNavigatedTo(object parameter)
     {
-        _setMinWidthWindow(800);
+        App.SetMinWidthWindow(800);
         IsLoading = true;
+
         var invoices = await App.Repository.Invoice.GetAllInvoiceAsync();
-        OriginalInvoices ??= new ObservableCollection<Invoice>(invoices);
+        OriginalInvoices = new ObservableCollection<Invoice>(invoices);
         CurrentPage = 1;
+        await Refesh();
         IsLoading = false;
     }
     public void OnNavigatedFrom()
     {
-        _setMinWidthWindow(500);
-
+        App.SetMinWidthWindow(500);
     }
 }
