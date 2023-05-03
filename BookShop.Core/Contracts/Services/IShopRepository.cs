@@ -44,4 +44,8 @@ public interface IShopRepository
     {
         get;
     }
+    IStatisticRepository Statistic
+    {
+        get; 
+    }
 }

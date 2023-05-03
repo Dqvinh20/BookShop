@@ -4,11 +4,15 @@ using BookShop.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Media;
 
 namespace BookShop.ViewModels;
 
 public class DashboardViewModel : ObservableRecipient
 {
+    
     private bool _isLoading = false;
 
     public bool IsLoading

@@ -29,4 +29,5 @@ public class RestShopRepository : IShopRepository
 
     public IStorageRepository Storage => new StorageRepository(_baseUrl, _accessToken);
 
+    public IStatisticRepository Statistic => new RestStatisticRepository(_restUrl, _accessToken);
 }

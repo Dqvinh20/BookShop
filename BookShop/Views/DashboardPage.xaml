@@ -84,9 +84,12 @@
         </DataTemplate>
         <media:AcrylicBrush x:Key="CustomAcrylicInAppBrush" TintOpacity="0.8" TintColor="Transparent" FallbackColor="Black"/>
 
-    </Page.Resources>
-    <Grid x:Name="ContentArea">
         
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea" Padding="0 0 0 100">
+        
+
         <ScrollViewer>
             <StackPanel Orientation="Vertical">
                 <ItemsRepeater 
