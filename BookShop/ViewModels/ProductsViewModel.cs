@@ -255,6 +255,11 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
     {
         if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
         {
+            if (string.IsNullOrEmpty(sender.Text) && _search != "") 
+            {
+                _search = "";
+                CurrentPage = 1;
+            }
             var suggestions = SearchBook(sender.Text);
 
             if (suggestions.Count > 0)

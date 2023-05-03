@@ -29,7 +29,7 @@ public class RestStatisticRepository : IStatisticRepository
     }
     public async Task<IEnumerable<SummaryData>> GetSummaryFromDateToDateAsync(DateTime fromDate, DateTime toDate)
     {
-        return await _http.GetAsync<IEnumerable<SummaryData>>($"{_func_controller}/summary_chart_by_date?from_date={fromDate}&_to_date={toDate}", _accessToken);
+        return await _http.GetAsync<IEnumerable<SummaryData>>($"{_func_controller}/summary_chart_by_date?from_date={fromDate.ToString("yyyy-MM-dd")}&_to_date={toDate.ToString("yyyy-MM-dd")}", _accessToken);
     }
 
 }

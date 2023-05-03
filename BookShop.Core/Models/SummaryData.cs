@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace BookShop.Core.Models;
+
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class SummaryData
 {
     [JsonProperty("timeline")]
