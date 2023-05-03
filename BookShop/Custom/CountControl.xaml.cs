@@ -21,9 +21,9 @@ using Windows.Globalization.NumberFormatting;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace BookShop.Custom;
-public sealed class ProductCountControlValueChangedEventArgs
+public sealed class CountControlValueChangedEventArgs
 {
-    public ProductCountControlValueChangedEventArgs(int oldValue, int newValue)
+    public CountControlValueChangedEventArgs(int oldValue, int newValue)
     {
         OldValue = oldValue;
         NewValue = newValue;
@@ -41,9 +41,9 @@ public sealed class ProductCountControlValueChangedEventArgs
 }
 
 
-public sealed partial class ProductCountControl : UserControl
+public sealed partial class CountControl : UserControl
 {
-    public ProductCountControl()
+    public CountControl()
     {
         InitializeComponent();
     }
@@ -51,29 +51,35 @@ public sealed partial class ProductCountControl : UserControl
     public static readonly DependencyProperty MaxProductCountProperty = DependencyProperty.Register(
         nameof(MaxProductCount),
         typeof(int),
-        typeof(ProductCountControl),
+        typeof(CountControl),
         new PropertyMetadata(1));
 
     public static readonly DependencyProperty MinProductCountProperty = DependencyProperty.Register(
         nameof(MinProductCount),
         typeof(int),
-        typeof(ProductCountControl),
+        typeof(CountControl),
         new PropertyMetadata(1));
 
     public static readonly DependencyProperty CurrentProductCountProperty = DependencyProperty.Register(
         nameof(CurrentProductCount),
         typeof(int),
-        typeof(ProductCountControl),
+        typeof(CountControl),
         new PropertyMetadata(1));
 
     public static readonly DependencyProperty NumberFormatterProperty = DependencyProperty.Register(
         nameof(NumberFormatter),
         typeof(INumberFormatter2),
-        typeof(ProductCountControl),
+        typeof(CountControl),
         new PropertyMetadata(new DecimalFormatter()
         {
             FractionDigits = 0
         }));
+
+    public static readonly DependencyProperty PrefixTextProperty = DependencyProperty.Register(
+        nameof(PrefixText),
+        typeof(string),
+        typeof(CountControl),
+        new PropertyMetadata(string.Empty));
 
     public int CurrentProductCount
     {
@@ -99,10 +105,16 @@ public sealed partial class ProductCountControl : UserControl
         set => SetValue(NumberFormatterProperty, value);
     }
 
-    public event TypedEventHandler<ProductCountControl, ProductCountControlValueChangedEventArgs>? ProductCountChanged;
+    public string PrefixText
+    {
+        get => (string)GetValue(PrefixTextProperty);
+        set => SetValue(PrefixTextProperty, value);
+    }
+
+    public event TypedEventHandler<CountControl, CountControlValueChangedEventArgs>? ProductCountChanged;
 
     private void CurrentCountNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
     {
-        ProductCountChanged?.Invoke(this, new ProductCountControlValueChangedEventArgs((int) args.OldValue, (int) args.NewValue));
+        ProductCountChanged?.Invoke(this, new CountControlValueChangedEventArgs((int) args.OldValue, (int) args.NewValue));
     }
 }

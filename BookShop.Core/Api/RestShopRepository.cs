@@ -19,12 +19,15 @@ public class RestShopRepository : IShopRepository
         _restUrl = $"{_baseUrl}/rest/v1/";
         _accessToken = accessToken;
     }
+
     public IAccountRepository Accounts => new AccountRepository(_restUrl, _accessToken);
 
     public ICategoriesRepository Categories => new RestCategoriesRepository(_restUrl, _accessToken);
 
     public IProductsRepository Products => new RestProductsRespository(_restUrl, _accessToken);
+    public IInvoiceRepository Invoice => new RestInvoiceRepository(_restUrl, _accessToken);
 
     public IStorageRepository Storage => new StorageRepository(_baseUrl, _accessToken);
 
+    public IStatisticRepository Statistic => new RestStatisticRepository(_restUrl, _accessToken);
 }

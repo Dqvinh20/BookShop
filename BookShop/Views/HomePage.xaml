@@ -36,7 +36,7 @@
 
         <DataTemplate x:Key="ProductTemplate" x:DataType="models:Product">
             <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Padding="12">
-                <Image Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
+                <Image x:Name="itemImage" Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
                 <TextBlock
                     Margin="12,12,12,0"
                     HorizontalAlignment="Left"
@@ -149,7 +149,6 @@
                             <Button Content="Apply filter" Click="OnApplyFilterButtonClick" Margin="{StaticResource SmallRightMargin}"/>
                             <Button Content="Clear filter" Click="OnClearFilterButtonClick"/>
                         </StackPanel>
-
                     </StackPanel>
                 </controls:Expander>
             </StackPanel>
@@ -167,7 +166,7 @@
                     RelativePanel.Below="topAppBar"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignRightWithPanel="True"
-                    animations:Connected.ListItemElementName="itemThumbnail"
+                    animations:Connected.ListItemElementName="itemImage"
                     animations:Connected.ListItemKey="animationKeyContentGrid"
                     animations:ItemsReorderAnimation.Duration="00:00:00.4000000"
                     DesiredWidth="300"
@@ -189,8 +188,9 @@
             RelativePanel.AlignBottomWithPanel="True"
             ColumnDefinitions="*,*"
             >
-            <custom:ProductCountControl 
-                x:Name="ProductCountControl"
+            <custom:CountControl 
+                PrefixText="Products per page: "
+                x:Name="CountControl"
                 CurrentProductCount="{x:Bind ViewModel.ItemPerPage, Mode=TwoWay}"
                 MaxProductCount="10"
                 MinProductCount="1"

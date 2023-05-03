@@ -1,4 +1,6 @@
-﻿using BookShop.Contracts.Services;
+﻿using System.Diagnostics;
+using BookShop.Contracts.Services;
+using BookShop.Core.Models;
 using BookShop.Services;
 using BookShop.ViewModels;
 
@@ -17,6 +19,8 @@ public sealed partial class ProductsDetailPage : Page
     {
         get;
     }
+
+    
     
     public ProductsDetailPage()
     {
@@ -26,6 +30,7 @@ public sealed partial class ProductsDetailPage : Page
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
+        ViewModel.CategoryName = categoryName;
         base.OnNavigatedTo(e);
         this.RegisterElementForConnectedAnimation("animationKeyContentGrid", itemHero);
     }

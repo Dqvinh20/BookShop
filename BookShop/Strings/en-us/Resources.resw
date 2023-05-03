@@ -130,10 +130,10 @@
     <value>Home</value>
   </data>
   <data name="Shell_CreateOrder.Content" xml:space="preserve">
-    <value>Create Order</value>
+    <value>Create Invoice</value>
   </data>
   <data name="Shell_Orders.Content" xml:space="preserve">
-    <value>Orders</value>
+    <value>Invoices</value>
   </data>
   <data name="Shell_Statistics.Content" xml:space="preserve">
     <value>Statistics</value>

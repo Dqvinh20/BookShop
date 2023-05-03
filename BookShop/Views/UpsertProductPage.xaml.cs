@@ -11,6 +11,7 @@ using Windows.Storage.Pickers;
 using Windows.Globalization.NumberFormatting;
 using Windows.Globalization;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -60,7 +61,6 @@ public sealed partial class UpsertProductPage : Page
              
         if(ViewModel.Item.Name != "")
         {
-
             categoryBox.Text = ViewModel.Item.Category!.Name;
 
             orgPriceNumberBox.IsEnabled = false;
@@ -157,13 +157,13 @@ public sealed partial class UpsertProductPage : Page
         {
             var result = await OnCreateOrUpdateProduct();
             ViewModel.IsLoading = false;
-
             if (button.Content == "Add")
             {
                 if (result != null)
                 {
                     ViewModel.Item = result;
                     await App.MainWindow.ShowMessageDialogAsync("Add product successfully", "Success");
+                    App.GetService<INavigationService>().GoBack();
                 }
                 else
                 {
@@ -172,10 +172,12 @@ public sealed partial class UpsertProductPage : Page
             }
             else
             {
+                
                 if (result != null)
                 {
                     ViewModel.Item = result;
                     await App.MainWindow.ShowMessageDialogAsync("Update product successfully", "Success");
+                    App.GetService<INavigationService>().GoBack();
                 }
                 else
                 {
@@ -187,19 +189,24 @@ public sealed partial class UpsertProductPage : Page
         {
             await App.MainWindow.ShowMessageDialogAsync("Please check your internet connection!", "Unexpected Error!");
             ViewModel.Item.Image = image;
-            await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            if (button.Content == "Add")
+            {
+                await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            }
         }
         catch (Exception ex)
         {
             await App.MainWindow.ShowMessageDialogAsync(ex.Message, "Unexpected Error!");
             ViewModel.Item.Image = image;
-            await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            if (button.Content == "Add")
+            {
+                await App.Repository.Storage.DeleteImageAsync(ViewModel.Item.ImagePath);
+            }
         }
         finally
         {
             ViewModel.IsLoading = false;
         }
-
     }
 
     private async Task<Product> OnCreateOrUpdateProduct()
@@ -211,7 +218,6 @@ public sealed partial class UpsertProductPage : Page
         }
 
         ViewModel.Item.Quantity = ViewModel.Item.OriginalQuantity;
-        ViewModel.Item.Category = null;
         var result = await App.Repository.Products.UpsertProductAsync(ViewModel.Item);
 
         return result.FirstOrDefault();

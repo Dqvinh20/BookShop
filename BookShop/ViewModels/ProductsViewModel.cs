@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Text;
@@ -141,14 +142,10 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
 
     public async Task Refesh(bool isFetchNewData = false)
     {
-        Debug.WriteLine("Before");
         if (isFetchNewData)
         {
-            Debug.WriteLine("While");
-
             OriginItem = new ObservableCollection<Product>(await App.Repository.Products.GetAllProductsAsync());
         }
-        Debug.WriteLine("After");
 
         _updateDataSource(_currentPage);
         _updatePagingInfo();
@@ -258,6 +255,11 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
     {
         if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
         {
+            if (string.IsNullOrEmpty(sender.Text) && _search != "") 
+            {
+                _search = "";
+                CurrentPage = 1;
+            }
             var suggestions = SearchBook(sender.Text);
 
             if (suggestions.Count > 0)
@@ -288,6 +290,7 @@ public class ProductsViewModel : ObservableRecipient, INavigationAware
             sender.Text = selected;
         }
     }
+   
     #endregion
     public void OnAddProductClick()
     {

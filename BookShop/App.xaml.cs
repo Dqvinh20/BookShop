@@ -85,7 +85,6 @@ public partial class App : Application
             services.AddSingleton<INavigationService, NavigationService>();
 
             // Core Services
-            services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
@@ -125,13 +124,25 @@ public partial class App : Application
         UnhandledException += App_UnhandledException;
     }
 
-    private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+    public static void SetMinWidthWindow(int width)
+    {
+        var manager = WinUIEx.WindowManager.Get(App.MainWindow);
+        manager.MinWidth = width;
+    }
+
+    public static void SetMinHeightWindow(int height)
+    {
+        var manager = WinUIEx.WindowManager.Get(App.MainWindow);
+        manager.MinHeight = height;
+    }
+    private async void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
         // TODO: Log and handle exceptions as appropriate.
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
         Console.WriteLine(sender);
         Console.WriteLine(e.Message);
         Console.WriteLine(e.Exception.StackTrace);
+        await App.MainWindow.ShowMessageDialogAsync(e.Exception.StackTrace, "Unexpected error!");
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)

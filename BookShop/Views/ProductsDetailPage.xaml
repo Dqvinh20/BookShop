@@ -114,6 +114,11 @@
                                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Quantity" />
                                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Quantity}" />
                             </StackPanel>
+
+                            <StackPanel  Margin="{StaticResource SmallTopMargin}">
+                                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Category" />
+                                <TextBlock x:Name="categoryName" Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.Item.Category.Name}" />
+                            </StackPanel>
                         </StackPanel>
                         <StackPanel x:Name="description" Margin="{StaticResource LargeTopMargin}" RelativePanel.Below="propertiesGroup2">
                             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Description"/>

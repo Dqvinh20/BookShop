@@ -87,7 +87,7 @@
                 </ScrollViewer>
             </ItemsRepeaterScrollHost>
         </StackPanel>
-        <Rectangle x:Name="AcrylicArea" Fill ="{ThemeResource CustomAcrylicInAppBrush}" Visibility="Collapsed"/>
+        <Rectangle x:Name="AcrylicArea" Fill ="{ThemeResource CustomAcrylicInAppBrush}" Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay}"/>
 
         <controls:Loading x:Name="LoadingControl" IsLoading="{x:Bind ViewModel.IsBusy, Mode=OneWay}">
             <StackPanel Orientation="Horizontal" Padding="12">
