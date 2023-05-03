@@ -19,7 +19,7 @@
         <DataTemplate x:Key="DashboardItem" x:DataType="models:DashboardItem">
             <UserControl >
                 <Grid
-                        Padding="12"
+                        Padding="20"
                         x:Name="CategoryTemplateRoot"
                         HorizontalAlignment="Stretch"
                         x:DefaultBindMode="OneWay"
@@ -30,7 +30,7 @@
                         ToolTipService.ToolTip="{Binding Title}"
                     >
 
-                    <StackPanel Orientation="Vertical" Background="Transparent">
+                    <StackPanel Orientation="Vertical" Background="Transparent" Padding="20" >
                         <TextBlock
                             x:Name="CategoryName"
                             HorizontalAlignment="Center"
@@ -39,14 +39,18 @@
                             Style="{StaticResource TitleTextBlockStyle}"
                             Text="{Binding Title}"
                             TextTrimming="CharacterEllipsis"
-                            TextWrapping="NoWrap" />
+                            TextWrapping="NoWrap" 
+                            Padding="10"
+                            />
                         <TextBlock
                             x:Name="CategoryName1"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Style="{StaticResource TitleTextBlockStyle}"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            FontWeight="SemiBold"
                             Text="{Binding Content}"
+                           
                             TextTrimming="CharacterEllipsis"
                             TextWrapping="NoWrap" />    
                         
@@ -55,12 +59,15 @@
             </UserControl>
         </DataTemplate>
         <DataTemplate x:Key="ProductTemplate" x:DataType="modelsCore:Product">
-            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Padding="12">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Padding="12" Height="300">
                 <Image x:Name="itemImage" HorizontalAlignment="Center" Source="{x:Bind Image}" Stretch="Fill" Width="200" Height="200"/>
                 <TextBlock
                     Margin="12,12,12,0"
                     HorizontalAlignment="Center"
+                    TextAlignment="Center"
                     TextWrapping="Wrap"
+                    MaxWidth="250"
+                    MaxLines="2"
                     TextTrimming="WordEllipsis" 
                     Style="{ThemeResource ProductTitleTextStyle}"
                     Text="{x:Bind Name}" />
@@ -77,12 +84,15 @@
         </DataTemplate>
         <media:AcrylicBrush x:Key="CustomAcrylicInAppBrush" TintOpacity="0.8" TintColor="Transparent" FallbackColor="Black"/>
 
-    </Page.Resources>
-    <Grid x:Name="ContentArea">
         
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea" Padding="0 0 0 100">
+        
+
         <ScrollViewer>
             <StackPanel Orientation="Vertical">
-                <ItemsRepeater
+                <ItemsRepeater 
                     x:Name="ItemRepeater"
                     VerticalAlignment="Top" 
                     HorizontalAlignment="Stretch"
@@ -114,14 +124,13 @@
                         Orientation="Horizontal"
                         ItemsSource="{x:Bind ViewModel.ProductsSource}"
                         ItemTemplate="{StaticResource ProductTemplate}"
-                        SelectedIndex="5">
+                        SelectedIndex="0">
                     <controls:Carousel.EasingFunction>
                         <CubicEase EasingMode="EaseOut" />
                     </controls:Carousel.EasingFunction>
-                    
+
                 </controls:Carousel>
             </StackPanel>
-
         </ScrollViewer>
         <controls:Loading 
             x:Name="LoadingControl"
